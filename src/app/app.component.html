@@ -1,7 +1,32 @@
-<div>
-  <h1>Hello there</h1>
-  <main>
-    <app-nav />
-    <router-outlet />
-  </main>
-</div>
+
+<mat-sidenav-container class="app-container">
+  <mat-sidenav #sidenav mode="over">
+    <div id='nav-menu-top'>
+      <button mat-button (click)="sidenav.toggle()"><span class="material-icons">close</span></button>
+    </div>
+    <nav>
+    @if (auth$ | async; as auth) {
+      @if (auth.isAdmin()) {
+        <li><a routerLink='/users'>Users</a></li>
+      }
+    } @else {
+      <li><a routerLink='/login'>Login</a></li>
+    }
+
+    </nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <header>
+      <div id='header-left'>
+        <span class="material-icons" (click)="sidenav.toggle()">menu</span>
+        <h1>Hello there</h1>
+      </div>
+      <a routerLink="/login" >Login</a>
+    </header>
+    <main>
+      <router-outlet />
+    </main>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -10,13 +10,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IUserService } from '../../domain/user/external/IUserService';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormGroup, FormControl } from '@angular/forms';
-import { catchError, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ErrorUtils } from '../../domain/common/ErrorUtils';
 import { UserModel } from '../../domain/user/external/UserModel';
 import { LoginRequest } from '../../domain/user/external/io/LoginRequest';
 import { ERole } from '../../domain/user/external/ERole';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { login } from '../../state/auth/auth.actions';
 
 @Component({
   selector: 'app-login',
@@ -37,6 +38,7 @@ export class LoginComponent {
   public error?: string;
 
   constructor(
+    private _store: Store,
     private _cdr: ChangeDetectorRef,
     private _router: Router,
     @Inject('UserService') private _srv: IUserService
@@ -58,6 +60,8 @@ export class LoginComponent {
   }
 
   private _handleLoginSuccess(userAuth: UserModel) {
+    this._store.dispatch(login({ user: userAuth }));
+
     if (userAuth.roles.includes(ERole.Admin)) {
       this._router.navigateByUrl('/admin');
     } else if (userAuth.roles.includes(ERole.Stocker)) {

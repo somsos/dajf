@@ -1,0 +1,32 @@
+.app-container {
+  height: 100%;
+  height: -moz-available;
+  height: -webkit-fill-available;
+  height: fill-available;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  div {
+    display: flex;
+    h1 {
+      margin-left: 0.5rem;
+      font-size: large;
+      margin-block-start: 0;
+      margin-block-end: 0;
+    }
+
+
+  }
+
+}
+
+main {
+  padding-top: 2rem;
+}
+
+
+.nav-menu-top {
+  text-align: right;
+}

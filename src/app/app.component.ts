@@ -1,19 +1,32 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { NavComponent } from './login/nav/nav.component';
-import { ProductServiceImpl } from '../domain/product/internal/ProductServiceImpl';
 import { domainDeps } from './app.domainDeps';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { UserModel } from '../domain/user/external/UserModel';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectLogged } from '../state/auth/auth.selectors';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, MatButtonModule, NavComponent],
+  imports: [
+    MatSidenavModule,
+    CommonModule,
+    RouterOutlet,
+    MatButtonModule,
+    RouterModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   providers: [...domainDeps],
 })
 export class AppComponent {
-  title = 'dajf';
+  auth$: Observable<UserModel | undefined>;
+
+  constructor(private store: Store) {
+    this.auth$ = this.store.select(selectLogged);
+  }
 }
