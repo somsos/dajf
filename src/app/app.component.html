@@ -1,18 +1,24 @@
 
 <mat-sidenav-container class="app-container">
-  <mat-sidenav #sidenav mode="over">
+  <mat-sidenav #sidenav mode="over" id='drawer'>
     <div id='nav-menu-top'>
       <button mat-button (click)="sidenav.toggle()"><span class="material-icons">close</span></button>
     </div>
     <nav>
     @if (auth$ | async; as auth) {
-      @if (auth.isAdmin()) {
-        <li><a routerLink='/users'>Users</a></li>
+      @if (isAdmin(auth.roles)) {
+        <li><a mat-button routerLink='/admin/users' (click)="sidenav.close()">Users</a></li>
       }
+      @if (isAdmin(auth.roles) || isStocker(auth.roles) ) {
+        <li><a mat-button routerLink='/products' (click)="sidenav.close()">Products</a></li>
+      }
+      @if (isAdmin(auth.roles) || isCashier(auth.roles) ) {
+        <li><a mat-button routerLink='/sells' (click)="sidenav.close()">Sells</a></li>
+      }
+      <li><button mat-button (click)="[logout(), sidenav.close()]">Logout</button></li>
     } @else {
-      <li><a routerLink='/login'>Login</a></li>
+      <li><a mat-button routerLink='/login' (click)="sidenav.close()">Login</a></li>
     }
-
     </nav>
   </mat-sidenav>
 
@@ -22,7 +28,12 @@
         <span class="material-icons" (click)="sidenav.toggle()">menu</span>
         <h1>Hello there</h1>
       </div>
-      <a routerLink="/login" >Login</a>
+      @if (auth$ | async; as auth) {
+        <button mat-button (click)="logout()">Logout</button>
+      } @else {
+        <a mat-button routerLink="/login" >Login</a>
+      }
+
     </header>
     <main>
       <router-outlet />

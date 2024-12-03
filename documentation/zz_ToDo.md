@@ -3,16 +3,18 @@
 ■ = actual
 X = finished
 
-- [■] Create Dashboards
+- [X] Create Dashboards
   - [X] Admin dashboard
   - [X] Stocker dashboard
   - [X] Cashier dashboard
-  - [■] Add nav that show only the allowed paths for the user
-  - [ ] Add just screen of list users
-  - [ ] Add just screen of list products
-  - [ ] Add just screen of list sells
-- [ ] Add NgRx
-  - [ ] Design UI state for auth
+  - [X] Add nav that show only the allowed paths for the user
+  - [X] Add just screen of list users
+  - [X] Add just screen of list products
+  - [X] Add just screen of list sells
+- [■] Add NgRx
+  - [X] Design UI state for auth
+  - [X] implement ngrx/state for auth
+  - [■] Add routing using router-store (the navigation must change when the state go back in the devTools)
   - [ ] Design UI state for users
   - [ ] Design UI state for products (must have users and images)
 - [ ] Implement router security by roles
