@@ -1,15 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormGroup, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { LoginRequest } from '../../domain/user/external/io/LoginRequest';
+import { LoginRequest } from '../../../domain/user/external/io/LoginRequest';
 import { Store } from '@ngrx/store';
-import { loginRequest } from '../../state/auth/auth.actions';
+import { loginRequest } from '../../../state/auth/auth.actions';
 
 @Component({
   selector: 'app-login',

@@ -1,6 +1,6 @@
 # ToDo
 
-■ = actual
+> = actual
 X = finished
 
 - [X] Create Dashboards
@@ -11,13 +11,11 @@ X = finished
   - [X] Add just screen of list users
   - [X] Add just screen of list products
   - [X] Add just screen of list sells
-- [■] Add NgRx
+- [ ] Add NgRx
   - [X] Design UI state for auth
   - [X] implement ngrx/state for auth
-  - [■] Add routing using router-store (the navigation must change when the state go back in the devTools)
-  - [ ] Design UI state for users
-  - [ ] Design UI state for products (must have users and images)
-- [ ] Implement router security by roles
+  - [X] Add routing using router-store (the navigation must change when the state go back in the devTools)
+- [>] Implement router security by roles
 - [ ] Connect login to backend
 - [ ] Crud user
   - [ ] List users
@@ -34,5 +32,3 @@ X = finished
   - [ ] Remove image
 - [ ] Sells
   - [ ] ????
-
-

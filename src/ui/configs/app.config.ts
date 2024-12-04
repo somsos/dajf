@@ -7,17 +7,22 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideStore } from '@ngrx/store';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { authReducer } from '../state/auth/auth.reducer';
+import { authReducer } from '../../state/auth/auth.reducer';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
 import { provideEffects } from '@ngrx/effects';
-import { AuthEffects } from '../state/auth/auth.effects';
+import { AuthEffects } from '../../state/auth/auth.effects';
 import { domainDeps } from './app.domainDeps';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { msgReducer } from '../../state/userMessages/msgs.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideStore({ router: routerReducer, auth: authReducer }),
+    provideStore({
+      router: routerReducer,
+      auth: authReducer,
+      msgs: msgReducer,
+    }),
     provideRouterStore(),
     provideEffects(AuthEffects),
     provideStoreDevtools({
