@@ -1,12 +1,18 @@
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IProductService } from '../visible/IProductService';
-import { ProductModel } from '../visible/ProductModel';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { IProductApi } from '../../../server/IProductApi';
+import { FindProductsPageRequest } from '../visible/io/FindProductsPageRequest';
+import { FindProductsPageResponse } from '../visible/io/FindProductsPageResponse';
 
 @Injectable({ providedIn: 'root' })
 export class ProductServiceImpl implements IProductService {
-  public getUsers(): Observable<ProductModel[]> {
-    console.log('getting ');
-    return of([]);
+  constructor(@Inject('ProductApi') private _api: IProductApi) {}
+
+  public findPage(
+    req: FindProductsPageRequest
+  ): Observable<FindProductsPageResponse> {
+    const findPageReq = this._api.findPage(req);
+    return findPageReq;
   }
 }

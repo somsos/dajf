@@ -1,4 +1,14 @@
 <div>
   <a mat-button routerLink="add">Add Product</a>
-  <p>product-list works!</p>
+  @if (productsReq$ | async; as products) {
+    <div>
+      @for (p of products.content; track p.id) {
+        <article>
+          <h2>{{p.name}}</h2>
+        </article>
+      }
+    </div>
+  } @else {
+    <p>loading...</p>
+  }
 </div>

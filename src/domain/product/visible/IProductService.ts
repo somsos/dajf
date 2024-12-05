@@ -1,8 +1,7 @@
 import { Observable } from 'rxjs';
-import { ProductModel } from './ProductModel';
-
-import { InjectionToken } from '@angular/core';
+import { FindProductsPageRequest } from './io/FindProductsPageRequest';
+import { FindProductsPageResponse } from './io/FindProductsPageResponse';
 
 export interface IProductService {
-  getUsers(): Observable<ProductModel[]>;
+  findPage(req: FindProductsPageRequest): Observable<FindProductsPageResponse>;
 }

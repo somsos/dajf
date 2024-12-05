@@ -19,16 +19,19 @@ X = finished
 - [>] Connect login to backend
   - [X] Sync request and response
   - [X] Show login server error
+- [X] Implement factory for api consumption
+  - [X] Implement api consumers for testing
+  - [X] Implement mock api consumers
+- [>] Crud products
+  - [>] List
+  - [ ] Add
+  - [ ] Delete
+  - [ ] Update
 - [ ] Crud user
   - [ ] List users
   - [ ] Add user
   - [ ] Delete user
   - [ ] Update user
-- [ ] Crud products
-  - [ ] List
-  - [ ] Add
-  - [ ] Delete
-  - [ ] Update
 - [ ] Product images
   - [ ] Add image (main image is the last added)
   - [ ] Remove image
