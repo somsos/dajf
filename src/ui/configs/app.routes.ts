@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from '../standalone/login/login.component';
 import { PageNotFoundComponent } from '../standalone/login/page-not-found/page-not-found.component';
-import { adminGuard, cashierGuard, stockerGuard } from './guards.guard';
+import { adminGuard, cashierGuard, stockerGuard } from './guards/guards.guard';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },

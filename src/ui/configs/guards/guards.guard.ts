@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ERole } from '../../domain/user/external/ERole';
+import { IRole } from '../../../domain/user/external/IRole';
 import {
   checkAccess,
   showGenericLackOfPermissionsMessage,
@@ -9,7 +9,8 @@ import {
 
 export const adminGuard: CanActivateFn = async (route, state) => {
   const store = inject(Store);
-  const canAccess = await checkAccess(store, ERole.Admin);
+  const roleToFind = { id: -1, authority: IRole.AdminRole };
+  const canAccess = await checkAccess(store, roleToFind);
   if (canAccess == false) {
     showGenericLackOfPermissionsMessage(store);
   }
@@ -18,7 +19,8 @@ export const adminGuard: CanActivateFn = async (route, state) => {
 
 export const stockerGuard: CanActivateFn = async (route, state) => {
   const store = inject(Store);
-  const canAccess = await checkAccess(store, ERole.Stocker);
+  const roleToFind = { id: -1, authority: IRole.StockerRole };
+  const canAccess = await checkAccess(store, roleToFind);
   if (canAccess == false) {
     showGenericLackOfPermissionsMessage(store);
   }
@@ -27,7 +29,8 @@ export const stockerGuard: CanActivateFn = async (route, state) => {
 
 export const cashierGuard: CanActivateFn = async (route, state) => {
   const store = inject(Store);
-  const canAccess = await checkAccess(store, ERole.Cashier);
+  const roleToFind = { id: -1, authority: IRole.CashierRole };
+  const canAccess = await checkAccess(store, roleToFind);
   if (canAccess == false) {
     showGenericLackOfPermissionsMessage(store);
   }

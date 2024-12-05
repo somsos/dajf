@@ -9,10 +9,13 @@ import { EMPTY, Observable } from 'rxjs';
 import { map, exhaustMap, catchError, tap, filter } from 'rxjs/operators';
 import { AuthActionsNames, setAutUser } from './auth.actions';
 import { Router } from '@angular/router';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { IUserService } from '../../domain/user/external/IUserService';
 import { LoginRequest } from '../../domain/user/external/io/LoginRequest';
 import { UserModel } from '../../domain/user/external/UserModel';
+import { ErrorDto } from '../../ui/commons/ErrorDto';
+import { showMessage } from '../userMessages/msgs.actions';
+import { IMessage } from '../userMessages/dto/UserMessage';
 
 /*
 exhaustMap(() => this.moviesService.getAll()
@@ -30,6 +33,7 @@ export class AuthEffects {
   readonly logout$: Observable<void> & CreateEffectMetadata;
 
   constructor(
+    private _store: Store<any>,
     @Inject('UserService') private _srv: IUserService,
     private actions$: Actions,
     private _router: Router
@@ -47,8 +51,8 @@ export class AuthEffects {
           map((d) => d as any as LoginRequest),
           exhaustMap((reqInfo) => {
             const req = this._srv.login(reqInfo).pipe(
-              map((authUser) => setAutUser(authUser)),
-              catchError((err) => this._handleError(err))
+              map((authUser) => setAutUser(authUser.user)),
+              catchError((err) => this._handleServerError(err))
             );
             return req;
             //
@@ -88,8 +92,14 @@ export class AuthEffects {
     );
   }
 
-  _handleError(err: any): Observable<never> {
-    console.warn(err);
+  _handleServerError(err: any): Observable<never> {
+    console.warn('_handleServerError:', err);
+    const error = ErrorDto.fromServer(err.error);
+    const msg: IMessage = {
+      message: error.message,
+      actionLabel: 'Ok',
+    };
+    this._store.dispatch(showMessage(msg));
     return EMPTY;
   }
 }

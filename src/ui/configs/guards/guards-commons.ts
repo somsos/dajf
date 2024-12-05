@@ -1,18 +1,18 @@
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
-import { ERole } from '../../domain/user/external/ERole';
-import { UserModel } from '../../domain/user/external/UserModel';
-import { selectLogged } from '../../state/auth/auth.selectors';
-import { IMessage } from '../../state/userMessages/dto/UserMessage';
-import { showMessage } from '../../state/userMessages/msgs.actions';
+import { IRole } from '../../../domain/user/external/IRole';
+import { UserModel } from '../../../domain/user/external/UserModel';
+import { selectLogged } from '../../../state/auth/auth.selectors';
+import { IMessage } from '../../../state/userMessages/dto/UserMessage';
+import { showMessage } from '../../../state/userMessages/msgs.actions';
 
 export async function checkAccess(
   store: Store<any>,
-  role: ERole
+  role: IRole
 ): Promise<boolean> {
   const auth = await getAuth(store);
-  const isAdmin = auth! && auth.roles.includes(ERole.Admin);
-  const canAccess = (auth! && auth.roles.includes(role)) || isAdmin;
+  const isAdmin = UserModel.isAdmin(auth?.roles);
+  const canAccess = UserModel.hasRole(auth?.roles, role) || isAdmin;
   return canAccess;
 }
 

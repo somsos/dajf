@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { LoginRequest } from './io/LoginRequest';
-import { UserModel } from './UserModel';
+import { LoginResponse } from './io/LoginResponse';
 
 export interface IUserService {
-  login(loginReqInfo: LoginRequest): Observable<UserModel>;
+  login(loginReqInfo: LoginRequest): Observable<LoginResponse>;
 }

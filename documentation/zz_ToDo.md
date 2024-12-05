@@ -11,12 +11,14 @@ X = finished
   - [X] Add just screen of list users
   - [X] Add just screen of list products
   - [X] Add just screen of list sells
-- [ ] Add NgRx
+- [X] Add NgRx
   - [X] Design UI state for auth
   - [X] implement ngrx/state for auth
   - [X] Add routing using router-store (the navigation must change when the state go back in the devTools)
-- [>] Implement router security by roles
-- [ ] Connect login to backend
+- [X] Implement router security by roles
+- [>] Connect login to backend
+  - [X] Sync request and response
+  - [X] Show login server error
 - [ ] Crud user
   - [ ] List users
   - [ ] Add user
