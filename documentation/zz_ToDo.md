@@ -25,6 +25,10 @@ X = finished
 - [>] Crud products
   - [X] List
   - [>] Add
+    - [>] Connect add product with backend
+    - [ ] show saving in progress spinner
+    - [ ] add add images
+    - [ ] show login in progress spinner
   - [ ] Delete
   - [ ] Update
 - [ ] Crud user

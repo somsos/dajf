@@ -3,6 +3,7 @@ import { FindProductsPageRequest } from '../../domain/product/visible/io/FindPro
 import { FindProductsPageResponse } from '../../domain/product/visible/io/FindProductsPageResponse';
 import { IProductApi } from '../IProductApi';
 import { ProductResponse } from '../../domain/product/visible/io/ProductResponse';
+import { ProductAddRequest } from '../../ui/modules/product/io/ProductAddRequest';
 
 export class ProductApiMock implements IProductApi {
   private readonly _mockData: ProductResponse[] = [
@@ -39,5 +40,13 @@ export class ProductApiMock implements IProductApi {
       number: req.page,
     };
     return of(page).pipe(delay(2000));
+  }
+
+  save(reqInfo: ProductAddRequest): Observable<ProductResponse> {
+    const toSave = reqInfo as any as ProductResponse;
+    toSave.id = this._mockData.length + 1;
+    this._mockData.push(toSave);
+    console.debug('mock saved', reqInfo);
+    return of(toSave).pipe(delay(2000));
   }
 }

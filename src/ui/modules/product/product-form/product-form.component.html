@@ -1,1 +1,16 @@
-<p>product-form works!</p>
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+
+  <label for="name">Name: </label>
+  <input id="name" type="text" formControlName="name">
+
+  <label for="price">Price: </label>
+  <input id="price" type="text" formControlName="price">
+
+  <label for="amount">Amount: </label>
+  <input id="amount" type="text" formControlName="amount">
+
+  <product-images-form (onSelectedImages)="catchSelectedImages($event)" />
+
+  <input type='submit' value='Add' [disabled]="!productForm.valid" />
+
+</form>

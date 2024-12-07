@@ -10,7 +10,10 @@ import {
 import { map, Observable, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { IProductService } from '../../../../domain/product/visible/IProductService';
+import {
+  IProductService,
+  ProductServiceName,
+} from '../../../../domain/product/visible/IProductService';
 import { FindProductsPageRequest } from '../../../../domain/product/visible/io/FindProductsPageRequest';
 import { FindProductsPageResponse } from '../../../../domain/product/visible/io/FindProductsPageResponse';
 import { MatTableDataSource } from '@angular/material/table';
@@ -31,7 +34,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(@Inject('ProductService') private _srv: IProductService) {}
+  constructor(@Inject(ProductServiceName) private _srv: IProductService) {}
 
   ngOnInit(): void {}
 

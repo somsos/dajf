@@ -14,7 +14,12 @@ import { AuthEffects } from '../../state/auth/auth.effects';
 import { domainDeps } from './app.domainDeps';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { msgReducer } from '../../state/userMessages/msgs.reducer';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
+import { tokenInterceptor } from './interceptors/tokenInterceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -36,7 +41,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
     ...domainDeps,
   ],
 };

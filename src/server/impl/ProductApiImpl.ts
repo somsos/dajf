@@ -1,14 +1,18 @@
-import { delay, Observable, take } from 'rxjs';
+import { delay, Observable, take, tap } from 'rxjs';
 import { FindProductsPageRequest } from '../../domain/product/visible/io/FindProductsPageRequest';
 import { FindProductsPageResponse } from '../../domain/product/visible/io/FindProductsPageResponse';
-import { IProductApi } from '../IProductApi';
+import {
+  endpointProducts,
+  endpointProductsPage,
+  IProductApi,
+} from '../IProductApi';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { environment } from '../../environment/environment';
+import { ProductResponse } from '../../domain/product/visible/io/ProductResponse';
+import { ProductAddRequest } from '../../ui/modules/product/io/ProductAddRequest';
 
 export class ProductApiImpl implements IProductApi {
   private readonly _http = inject(HttpClient);
-  private static readonly epPage = environment.host + '/products/page';
 
   findPage(req: FindProductsPageRequest): Observable<FindProductsPageResponse> {
     const params = new HttpParams();
@@ -16,7 +20,19 @@ export class ProductApiImpl implements IProductApi {
     params.set('size', req.size);
     const options = { params: params };
     return this._http
-      .get<FindProductsPageResponse>(ProductApiImpl.epPage, options)
+      .get<FindProductsPageResponse>(endpointProductsPage, options)
       .pipe(take(1), delay(2000));
+  }
+
+  save(reqInfo: ProductAddRequest): Observable<ProductResponse> {
+    const images = reqInfo.images;
+    reqInfo.images = undefined;
+    console.log('images', images);
+    return this._http.post<ProductResponse>(endpointProducts, reqInfo);
+    /*
+    .pipe(tap((resp) => {
+        resp.id
+      }));
+    */
   }
 }

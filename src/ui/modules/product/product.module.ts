@@ -11,12 +11,22 @@ import { ProductApiImpl } from '../../../server/impl/ProductApiImpl';
 import { ProductApiMock } from '../../../server/mock4testing/ProductApiMock';
 import { environment } from '../../../environment/environment';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ProductImagesFormComponent } from './product-images-form/product-images-form.component';
 
 const dataSource = environment.mockData ? ProductApiMock : ProductApiImpl;
 
 @NgModule({
-  declarations: [ProductListComponent, ProductFormComponent],
+  declarations: [
+    ProductListComponent,
+    ProductFormComponent,
+    ProductImagesFormComponent,
+  ],
   imports: [
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatPaginatorModule,
     MatTableModule,
     ProductRoutingModule,
