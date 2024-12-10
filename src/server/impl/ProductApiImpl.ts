@@ -10,18 +10,17 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { ProductResponse } from '../../domain/product/visible/io/ProductResponse';
 import { ProductAddRequest } from '../../ui/modules/product/io/ProductAddRequest';
+import { environment } from '../../environment/environment';
 
 export class ProductApiImpl implements IProductApi {
   private readonly _http = inject(HttpClient);
 
   findPage(req: FindProductsPageRequest): Observable<FindProductsPageResponse> {
-    const params = new HttpParams();
-    params.set('page', req.page);
-    params.set('size', req.size);
+    const params = new HttpParams().set('page', req.page).set('size', req.size);
     const options = { params: params };
     return this._http
       .get<FindProductsPageResponse>(endpointProductsPage, options)
-      .pipe(take(1), delay(2000));
+      .pipe(take(1), delay(environment.shortDelay));
   }
 
   save(reqInfo: ProductAddRequest): Observable<ProductResponse> {

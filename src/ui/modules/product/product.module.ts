@@ -11,11 +11,21 @@ import { ProductApiImpl } from '../../../server/impl/ProductApiImpl';
 import { ProductApiMock } from '../../../server/mock4testing/ProductApiMock';
 import { environment } from '../../../environment/environment';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ProductImagesFormComponent } from './product-images-form/product-images-form.component';
+import { SpinnerComponent } from '../../standalone/common/spinner/spinner.component';
+import { productApiName } from '../../../server/IProductApi';
+import { ProductServiceName } from '../../../domain/product/visible/IProductService';
+import { productImageDaoName } from '../../../server/IProductImageDao';
+import { ProductImageDaoMock } from '../../../server/mock4testing/ProductImageDaoMock';
+import { ProductImageDaoApi } from '../../../server/impl/ProductImageDaoApi';
 
 const dataSource = environment.mockData ? ProductApiMock : ProductApiImpl;
+const dataSourceImages = environment.mockData
+  ? ProductImageDaoMock
+  : ProductImageDaoApi;
 
 @NgModule({
   declarations: [
@@ -24,6 +34,8 @@ const dataSource = environment.mockData ? ProductApiMock : ProductApiImpl;
     ProductImagesFormComponent,
   ],
   imports: [
+    SpinnerComponent,
+    MatInputModule,
     MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
@@ -35,8 +47,9 @@ const dataSource = environment.mockData ? ProductApiMock : ProductApiImpl;
     RouterModule,
   ],
   providers: [
-    { provide: 'ProductApi', useClass: dataSource },
-    { provide: 'ProductService', useClass: ProductServiceImpl },
+    { provide: productImageDaoName, useClass: dataSourceImages },
+    { provide: productApiName, useClass: dataSource },
+    { provide: ProductServiceName, useClass: ProductServiceImpl },
   ],
 })
 export class productModule {}

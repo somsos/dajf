@@ -30,7 +30,14 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['id', 'name', 'price', 'amount'];
   productsPageReq$ = new Observable<FindProductsPageResponse>();
   tableContent = new MatTableDataSource<ProductResponse>();
+  Arr = Array;
+
   private _destroyedRef = inject(DestroyRef);
+  private _itemsPerPage = 10;
+  private currentPage: FindProductsPageRequest = {
+    page: 0,
+    size: this._itemsPerPage,
+  };
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -39,7 +46,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    this._getPage({ page: 0, size: 5 });
+    this._getPage(this.currentPage);
   }
 
   private _getPage(infoReq: FindProductsPageRequest) {
@@ -52,6 +59,16 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   }
 
   handlePaginatorEvent(pageEvent: PageEvent) {
-    this._getPage({ page: pageEvent.pageIndex, size: pageEvent.pageSize });
+    this.currentPage.page = pageEvent.pageIndex;
+    this._getPage(this.currentPage);
+  }
+
+  refresh() {
+    this._getPage(this.currentPage);
+  }
+
+  onSelectPage(pageNumber: any) {
+    this.currentPage.page = pageNumber;
+    this._getPage(this.currentPage);
   }
 }

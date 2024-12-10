@@ -53,10 +53,10 @@ export class AuthApiMock implements IAuthApi {
     }
 
     if (userAuth) {
-      return of(userAuth).pipe(delay(2000));
+      return of(userAuth).pipe(delay(environment.longDelay));
     }
 
     const error = { error: { message: '', cause: 'xx' } };
-    return throwError(() => error).pipe(delay(2000));
+    return throwError(() => error).pipe(delay(environment.longDelay));
   }
 }

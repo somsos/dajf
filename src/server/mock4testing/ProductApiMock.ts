@@ -1,10 +1,14 @@
-import { delay, Observable, of, take } from 'rxjs';
+import { concatMap, delay, Observable, of, switchMap, tap } from 'rxjs';
 import { FindProductsPageRequest } from '../../domain/product/visible/io/FindProductsPageRequest';
 import { FindProductsPageResponse } from '../../domain/product/visible/io/FindProductsPageResponse';
 import { IProductApi } from '../IProductApi';
 import { ProductResponse } from '../../domain/product/visible/io/ProductResponse';
 import { ProductAddRequest } from '../../ui/modules/product/io/ProductAddRequest';
+import { Inject, Injectable } from '@angular/core';
+import { IProductImageDao, productImageDaoName } from '../IProductImageDao';
+import { environment } from '../../environment/environment';
 
+@Injectable({ providedIn: 'root' })
 export class ProductApiMock implements IProductApi {
   private readonly _mockData: ProductResponse[] = [
     { id: 1, name: 'product 1', amount: 10, price: 10.2, images: [4, 5] },
@@ -21,12 +25,15 @@ export class ProductApiMock implements IProductApi {
     { id: 12, name: 'product 12', amount: 12, price: 120.3, images: [] },
     { id: 13, name: 'product 13', amount: 13, price: 130.4, images: [6, 7] },
     { id: 14, name: 'product 14', amount: 14, price: 140.5, images: [] },
-    { id: 15, name: 'product 15', amount: 15, price: 150.1, images: [1, 2, 3] },
-    { id: 16, name: 'product 16', amount: 16, price: 160.2, images: [4, 5] },
+    { id: 15, name: 'product 15', amount: 15, price: 150.1, images: [8, 9] },
+    { id: 16, name: 'product 16', amount: 16, price: 160.2, images: [10] },
     { id: 17, name: 'product 17', amount: 17, price: 170.3, images: [] },
-    { id: 18, name: 'product 18', amount: 18, price: 180.4, images: [6, 7] },
-    { id: 19, name: 'product 19', amount: 19, price: 190.5, images: [] },
+    { id: 18, name: 'product 18', amount: 18, price: 180.4, images: [11] },
+    { id: 19, name: 'product 19', amount: 19, price: 190.5, images: [12] },
+    { id: 20, name: 'product 20', amount: 20, price: 200.2, images: [] },
   ];
+
+  constructor(@Inject(productImageDaoName) private _imgSrv: IProductImageDao) {}
 
   findPage(req: FindProductsPageRequest): Observable<FindProductsPageResponse> {
     const startingPoint = req.page * req.size;
@@ -39,14 +46,29 @@ export class ProductApiMock implements IProductApi {
       totalPages: Math.ceil(this._mockData.length / req.size),
       number: req.page,
     };
-    return of(page).pipe(delay(2000));
+    return of(page).pipe(delay(environment.longDelay));
   }
 
   save(reqInfo: ProductAddRequest): Observable<ProductResponse> {
     const toSave = reqInfo as any as ProductResponse;
     toSave.id = this._mockData.length + 1;
-    this._mockData.push(toSave);
-    console.debug('mock saved', reqInfo);
-    return of(toSave).pipe(delay(2000));
+    const imagesTemp = structuredClone(reqInfo.images);
+    reqInfo.images = undefined;
+    const reqSaveUser = of(toSave).pipe(
+      delay(environment.shortDelay),
+      tap(() => {
+        this._mockData.push(toSave);
+      }),
+      concatMap((saved) => {
+        return this._imgSrv.saveImages(saved.id, imagesTemp);
+      }),
+      switchMap((images) => {
+        images.forEach((imageId) => {
+          toSave.images.push(imageId);
+        });
+        return of(toSave);
+      })
+    );
+    return reqSaveUser;
   }
 }

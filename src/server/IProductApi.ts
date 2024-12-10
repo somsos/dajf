@@ -5,7 +5,7 @@ import { ProductAddRequest } from '../ui/modules/product/io/ProductAddRequest';
 import { ProductResponse } from '../domain/product/visible/io/ProductResponse';
 import { environment } from '../environment/environment';
 
-export const IProductApiName = 'ProductApi';
+export const productApiName = 'ProductApi';
 
 export const endpointProducts = environment.host + '/products';
 export const endpointProductsPage = endpointProducts + '/page';

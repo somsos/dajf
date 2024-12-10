@@ -3,4 +3,6 @@ export const environment = {
   production: false,
   mockData: true,
   apiKey: 'devKey',
+  longDelay: 2000,
+  shortDelay: 500,
 };

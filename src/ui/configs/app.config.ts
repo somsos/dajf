@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
-import { provideStore } from '@ngrx/store';
+import { provideStore, ActionReducer, MetaReducer } from '@ngrx/store';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { authReducer } from '../../state/auth/auth.reducer';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
@@ -20,15 +20,31 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { tokenInterceptor } from './interceptors/tokenInterceptor';
+import { localStorageSync } from 'ngrx-store-localstorage';
+
+export function localStorageSyncReducer(
+  reducer: ActionReducer<any>
+): ActionReducer<any> {
+  return localStorageSync({ keys: ['auth'], rehydrate: true })(reducer);
+}
+
+export const metaReducers: Array<MetaReducer<any, any>> = [
+  localStorageSyncReducer,
+];
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideStore({
-      router: routerReducer,
-      auth: authReducer,
-      msgs: msgReducer,
-    }),
+    provideStore(
+      {
+        router: routerReducer,
+        auth: authReducer,
+        msgs: msgReducer,
+      },
+      {
+        metaReducers: metaReducers,
+      }
+    ),
     provideRouterStore(),
     provideEffects(AuthEffects),
     provideStoreDevtools({

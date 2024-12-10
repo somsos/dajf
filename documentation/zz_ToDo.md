@@ -24,13 +24,20 @@ X = finished
   - [X] Implement mock api consumers
 - [>] Crud products
   - [X] List
+    - [X] Controls for page navigation
   - [>] Add
-    - [>] Connect add product with backend
-    - [ ] show saving in progress spinner
-    - [ ] add add images
-    - [ ] show login in progress spinner
+    - [X] show saving in progress spinner
+    - [X] add images
+    - [X] show login in progress spinner
+  - [>] Details
   - [ ] Delete
   - [ ] Update
+  - [ ] Connect to server
+    - [ ] List
+    - [ ] Add
+    - [ ] Details
+    - [ ] Delete
+    - [ ] Update
 - [ ] Crud user
   - [ ] List users
   - [ ] Add user
@@ -41,3 +48,9 @@ X = finished
   - [ ] Remove image
 - [ ] Sells
   - [ ] ????
+
+```ts
+export declare function provideStore<T, V extends Action = Action>(
+  reducers?: ActionReducerMap<T, V> | InjectionToken<ActionReducerMap<T, V>>,
+  config?: RootStoreConfig<T, V>): EnvironmentProviders;
+```

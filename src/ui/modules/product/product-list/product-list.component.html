@@ -31,16 +31,27 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-      <mat-paginator
-        showFirstLastButtons
-        aria-label="Select page"
-        [pageSizeOptions]="[5, 10]"
-        [length]="page.totalElements"
-        [pageIndex]="page.number"
-        (page)="handlePaginatorEvent($event)"
-      />
+      <div class='table-buttons'>
+        <button mat-button (click)="refresh()">Refresh</button>
+        <div id='select-page'>
+          @for (x of [].constructor(page.totalPages); track i; let i = $index) {
+            <button mat-button
+              (click)="onSelectPage(i)"
+              [ngClass]="page.number == i ? 'page-active' : ''"
+              >{{i + 1}}</button>
+          }
+        </div>
+        <mat-paginator
+          showFirstLastButtons
+          aria-label="Select page"
+          [pageSizeOptions]="[10]"
+          [length]="page.totalElements"
+          [pageIndex]="page.number"
+          (page)="handlePaginatorEvent($event)"
+        />
+      </div>
     } @else {
-      <p>loading...</p>
+      <my-spinner />
     }
 
   </div>

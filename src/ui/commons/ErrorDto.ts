@@ -20,4 +20,23 @@ export class ErrorDto {
 
     return new ErrorDto(err.message, err.cause, err.causes);
   }
+
+  static fromAny(error: any): ErrorDto {
+    console.warn(error);
+    let msg = 'unknown error';
+    let cause = 'unknown cause';
+    if (typeof error == 'string') {
+      msg = error;
+    }
+
+    if (error.message && typeof error.message == 'string') {
+      msg = error.message;
+    }
+
+    if (error.cause && typeof error.cause == 'string') {
+      cause = error.cause;
+    }
+
+    return new ErrorDto(msg, cause);
+  }
 }
