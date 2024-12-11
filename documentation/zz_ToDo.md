@@ -31,8 +31,8 @@ X = finished
     - [X] show login in progress spinner
   - [X] Details
     - [X] Show images
-  - [>] Delete
-  - [ ] Update
+  - [X] Delete
+  - [>] Update
   - [ ] Connect to server
     - [ ] List
     - [ ] Add

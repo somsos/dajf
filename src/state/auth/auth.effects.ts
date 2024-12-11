@@ -14,7 +14,7 @@ import { IUserService } from '../../domain/user/external/IUserService';
 import { LoginRequest } from '../../domain/user/external/io/LoginRequest';
 import { UserModel } from '../../domain/user/external/UserModel';
 import { ErrorDto } from '../../ui/commons/ErrorDto';
-import { showMessage } from '../userMessages/msgs.actions';
+import { showSnackBack } from '../userMessages/msgs.actions';
 import { IMessage } from '../userMessages/dto/UserMessage';
 
 /*
@@ -99,7 +99,7 @@ export class AuthEffects {
       message: error.message,
       actionLabel: 'Ok',
     };
-    this._store.dispatch(showMessage(msg));
+    this._store.dispatch(showSnackBack(msg));
     return EMPTY;
   }
 }

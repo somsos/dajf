@@ -1,4 +1,12 @@
-import { concatMap, delay, Observable, of, switchMap, tap } from 'rxjs';
+import {
+  concatMap,
+  delay,
+  Observable,
+  of,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 import { FindProductsPageRequest } from '../../domain/product/visible/io/FindProductsPageRequest';
 import { FindProductsPageResponse } from '../../domain/product/visible/io/FindProductsPageResponse';
 import { IProductApi } from '../IProductApi';
@@ -7,10 +15,11 @@ import { ProductAddRequest } from '../../ui/modules/product/io/ProductAddRequest
 import { Inject, Injectable } from '@angular/core';
 import { IProductImageDao, productImageDaoName } from '../IProductImageDao';
 import { environment } from '../../environment/environment';
+import { ErrorDto } from '../../ui/commons/ErrorDto';
 
 @Injectable({ providedIn: 'root' })
 export class ProductApiMock implements IProductApi {
-  private readonly _mockData: ProductResponse[] = [
+  private _mockData: ProductResponse[] = [
     { id: 1, name: 'product 1', amount: 10, price: 10.2, images: [4, 5] },
     { id: 2, name: 'product 2', amount: 20, price: 20.3, images: [] },
     { id: 3, name: 'product 3', amount: 30, price: 30.4, images: [6, 7] },
@@ -78,5 +87,21 @@ export class ProductApiMock implements IProductApi {
   findById(id: number): Observable<ProductResponse> {
     const found = this._mockData.filter((p) => p.id == id)[0];
     return of(found).pipe(delay(environment.longDelay));
+  }
+
+  deleteById(id: number): Observable<ProductResponse> {
+    console.debug('product to delete: ' + id);
+    return this.findById(id).pipe(
+      switchMap((found) => {
+        if (!found) {
+          return throwError(() => {
+            return new ErrorDto('Producto a eliminar no encontrado', '');
+          });
+        }
+        const filtered = this._mockData.filter((p) => p.id !== found.id);
+        this._mockData = filtered;
+        return of(found).pipe(delay(environment.longDelay));
+      })
+    );
   }
 }

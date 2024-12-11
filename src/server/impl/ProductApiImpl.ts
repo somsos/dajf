@@ -38,4 +38,8 @@ export class ProductApiImpl implements IProductApi {
   findById(id: number): Observable<ProductResponse> {
     throw new Error('Method not implemented.');
   }
+
+  deleteById(productId: number): Observable<ProductResponse> {
+    throw new Error('Method not implemented.');
+  }
 }

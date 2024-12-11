@@ -1,4 +1,17 @@
 <ng-content>
-  <product-form type='update'/>
+  <product-form type='details' [readReq$]='findByIdReq$' />
+
+  @if(findByIdReq$ | async; as p) {
+    <product-images-list [images]='p.images' />
+  }
+
+  <div>
+  @if (!delLoading) {
+    <button mat-button color="warn" (click)="deleteById()">Eliminar</button>
+  } @else {
+    <button mat-button disabled >Eliminando...</button>
+  }
+  </div>
+
 </ng-content>
 

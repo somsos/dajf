@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { clearMessage, showMessage } from './msgs.actions';
+import { clearMessage, showSnackBack } from './msgs.actions';
 import { IMessage } from './dto/UserMessage';
 
 export interface MsgsState {
@@ -13,6 +13,6 @@ export const msgsInitialState: MsgsState = {
 
 export const msgReducer = createReducer(
   msgsInitialState,
-  on(showMessage, (state, msg) => ({ ...state, snackBar: msg })),
+  on(showSnackBack, (state, msg) => ({ ...state, snackBar: msg })),
   on(clearMessage, (state) => ({ ...state, snackBar: undefined }))
 );

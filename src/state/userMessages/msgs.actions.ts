@@ -6,7 +6,7 @@ export const MsgsActionsNames = {
   ClearMsg: '[Msgs] Hide Message',
 };
 
-export const showMessage = createAction(
+export const showSnackBack = createAction(
   MsgsActionsNames.ShowMsg,
   props<IMessage>()
 );

@@ -28,12 +28,13 @@
         <span class="material-icons" (click)="sidenav.toggle()">menu</span>
         <h1>Hello there</h1>
       </div>
+      <div>
       @if (auth$ | async; as auth) {
         <button mat-button (click)="logout()">Logout</button>
       } @else {
         <a mat-button routerLink="/login" >Login</a>
       }
-
+      </div>
     </header>
     <main>
       <router-outlet />

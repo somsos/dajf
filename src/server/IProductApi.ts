@@ -16,4 +16,6 @@ export interface IProductApi {
   save(reqInfo: ProductAddRequest): Observable<ProductResponse>;
 
   findById(id: number): Observable<ProductResponse>;
+
+  deleteById(productId: number): Observable<ProductResponse>;
 }

@@ -7,7 +7,7 @@ import {
   ProductServiceName,
   IProductService,
 } from '../../../../domain/product/visible/IProductService';
-import { showMessage } from '../../../../state/userMessages/msgs.actions';
+import { showSnackBack } from '../../../../state/userMessages/msgs.actions';
 import { ErrorDto } from '../../../commons/ErrorDto';
 import { ProductAddRequest } from '../io/ProductAddRequest';
 
@@ -40,7 +40,7 @@ export class ProductFormAddComponent {
       error: (err) => {
         const error = ErrorDto.fromAny(err);
         const message = { message: error.message, actionLabel: 'ok' };
-        this._store.dispatch(showMessage(message));
+        this._store.dispatch(showSnackBack(message));
         this.saveReq = undefined;
       },
     });

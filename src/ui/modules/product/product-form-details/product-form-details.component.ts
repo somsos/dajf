@@ -14,7 +14,6 @@ import { Observable, take } from 'rxjs';
 })
 export class ProductFormDetailsComponent implements OnInit {
   findByIdReq$: Observable<ProductResponse> | undefined;
-  isLoading = true;
 
   private _activatedRoute = inject(ActivatedRoute);
   private _router = inject(Router);
@@ -32,16 +31,9 @@ export class ProductFormDetailsComponent implements OnInit {
     if (typeof id !== 'number') {
       return;
     }
-    console.log('idParam', idParam);
+    console.debug('idParam', idParam);
     this.findByIdReq$ = this._srv.findById(id);
-    this.findByIdReq$.pipe(take(1)).subscribe({
-      complete: () => {
-        this.isLoading = false;
-        setTimeout(() => {
-          //this.findByIdReq$ = undefined;
-        }, 200);
-      },
-    });
+    this.findByIdReq$.pipe(take(1)).subscribe();
   }
 
   onBack() {

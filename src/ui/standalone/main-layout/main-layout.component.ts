@@ -3,14 +3,14 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { CommonModule } from '@angular/common';
-import { filter, map, Observable } from 'rxjs';
+import { filter, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { UserModel } from '../../../domain/user/external/UserModel';
 import { selectLogged } from '../../../state/auth/auth.selectors';
 import { clearAuthUser } from '../../../state/auth/auth.actions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { selectSnackBar } from '../../../state/userMessages/msgs.selectors';
-import { ErrorDto } from '../../commons/ErrorDto';
+import { DialogService } from '../../commons/DialogService';
 
 @Component({
   selector: 'main-layout-root',
@@ -22,6 +22,7 @@ import { ErrorDto } from '../../commons/ErrorDto';
     MatButtonModule,
     RouterModule,
   ],
+  providers: [DialogService],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
 })

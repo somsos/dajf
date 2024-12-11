@@ -1,4 +1,4 @@
-import { delay, Observable, of } from 'rxjs';
+import { delay, Observable, of, take } from 'rxjs';
 import { IProductService } from '../visible/IProductService';
 import { Inject, Injectable } from '@angular/core';
 import { IProductApi, productApiName } from '../../../server/IProductApi';
@@ -14,15 +14,18 @@ export class ProductServiceImpl implements IProductService {
   public findPage(
     req: FindProductsPageRequest
   ): Observable<FindProductsPageResponse> {
-    const findPageReq = this._api.findPage(req);
-    return findPageReq;
+    return this._api.findPage(req).pipe(take(1));
   }
 
   public save(reqInfo: ProductAddRequest): Observable<ProductResponse> {
-    return this._api.save(reqInfo);
+    return this._api.save(reqInfo).pipe(take(1));
   }
 
   findById(id: number): Observable<ProductResponse> {
-    return this._api.findById(id);
+    return this._api.findById(id).pipe(take(1));
+  }
+
+  deleteById(productId: number): Observable<ProductResponse> {
+    return this._api.deleteById(productId).pipe(take(1));
   }
 }

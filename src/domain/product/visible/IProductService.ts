@@ -12,4 +12,6 @@ export interface IProductService {
   save(reqInfo: ProductAddRequest): Observable<ProductResponse>;
 
   findById(idParam: number): Observable<ProductResponse>;
+
+  deleteById(productId: number): Observable<ProductResponse>;
 }

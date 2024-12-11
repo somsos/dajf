@@ -4,7 +4,7 @@ import { IRole } from '../../../domain/user/external/IRole';
 import { UserModel } from '../../../domain/user/external/UserModel';
 import { selectLogged } from '../../../state/auth/auth.selectors';
 import { IMessage } from '../../../state/userMessages/dto/UserMessage';
-import { showMessage } from '../../../state/userMessages/msgs.actions';
+import { showSnackBack } from '../../../state/userMessages/msgs.actions';
 
 export async function checkAccess(
   store: Store<any>,
@@ -34,5 +34,5 @@ function getAuth(store: Store<any>): Promise<UserModel | undefined> {
 }
 
 function showSnackBar(store: Store<any>, msg: IMessage) {
-  store.dispatch(showMessage(msg));
+  store.dispatch(showSnackBack(msg));
 }
