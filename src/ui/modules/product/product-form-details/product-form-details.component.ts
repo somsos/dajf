@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { Component, inject, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   IProductService,
@@ -6,7 +6,6 @@ import {
 } from '../../../../domain/product/visible/IProductService';
 import { ProductResponse } from '../../../../domain/product/visible/io/ProductResponse';
 import { Observable, take } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-product-form-details',
@@ -31,21 +30,21 @@ export class ProductFormDetailsComponent implements OnInit {
   private _findProductById(idParam: string | null) {
     const id = parseInt(idParam ?? 'null');
     if (typeof id !== 'number') {
-      console.log('ruun');
       return;
     }
     console.log('idParam', idParam);
     this.findByIdReq$ = this._srv.findById(id);
     this.findByIdReq$.pipe(take(1)).subscribe({
-      next: (d) => {
-        console.log('dind', d);
-      },
       complete: () => {
         this.isLoading = false;
         setTimeout(() => {
-          this.findByIdReq$ = undefined;
+          //this.findByIdReq$ = undefined;
         }, 200);
       },
     });
+  }
+
+  onBack() {
+    this._router.navigateByUrl('products');
   }
 }

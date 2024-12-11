@@ -30,13 +30,14 @@ X = finished
     - [X] add images
     - [X] show login in progress spinner
   - [X] Details
-    - [>] Show images
-  - [ ] Delete
+    - [X] Show images
+  - [>] Delete
   - [ ] Update
   - [ ] Connect to server
     - [ ] List
     - [ ] Add
     - [ ] Details
+      - [ ] Show images
     - [ ] Delete
     - [ ] Update
 - [ ] Crud user

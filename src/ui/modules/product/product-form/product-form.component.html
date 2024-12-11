@@ -1,37 +1,47 @@
-<form [formGroup]="productForm" (ngSubmit)="onSubmit()" class='form-container' >
+@if(productFound) {
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class='form-container' >
 
-  <mat-form-field class="example-full-width">
-    <mat-label for="name">Name:</mat-label>
-    <input matInput id="name" type="text" formControlName="name" />
-  </mat-form-field>
-
-  <mat-form-field class="example-full-width">
-    <mat-label for="price">Price:</mat-label>
-    <input matInput id="price" type="number" formControlName="price" >
-  </mat-form-field>
-
-
-  <mat-form-field class="example-full-width">
-    <mat-label for="amount">Amount:</mat-label>
-    <input matInput id="amount" type="number" formControlName="amount" >
-  </mat-form-field>
-
-  <product-images-form (onSelectedImages)="catchSelectedImages($event)" />
-
-  <div>
-    @if (!actionReq) {
-      @if (type == 'add' || type == 'update') {
-        <button mat-button (click)="productForm.reset()">Clean</button>
-        <button mat-button [disabled]="!productForm.valid">{{btnSubmitLabel}}</button>
-      }
-    } @else {
-      <my-spinner />
+    @if (type == "details" || type == "update") {
+      <mat-form-field class="example-full-width">
+        <mat-label for="name">Id:</mat-label>
+        <input matInput id="name" type="text" disabled value="{{productFound.id}}" />
+      </mat-form-field>
     }
-  </div>
 
-</form>
+    <mat-form-field class="example-full-width">
+      <mat-label for="name">Name:</mat-label>
+      <input matInput id="name" type="text" formControlName="name" />
+    </mat-form-field>
 
-@if (type == 'details') {
-  <button mat-button (click)="onBack()">Back</button>
+    <mat-form-field class="example-full-width">
+      <mat-label for="price">Price:</mat-label>
+      <input matInput id="price" type="number" formControlName="price" >
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label for="amount">Amount:</mat-label>
+      <input matInput id="amount" type="number" formControlName="amount" >
+    </mat-form-field>
+
+    @if (type != "details") {
+      <product-images-form (onSelectedImages)="catchSelectedImages($event)" />
+    }
+
+    <div>
+      @if (!actionReq$) {
+        @if (type == 'add' || type == 'update') {
+          <button mat-button (click)="productForm.reset()">Clean</button>
+          <button mat-button [disabled]="!productForm.valid">{{btnSubmitLabel}}</button>
+        }
+      } @else {
+        <my-spinner />
+      }
+    </div>
+
+  </form>
+} @else {
+  <my-spinner />
 }
+
+
 

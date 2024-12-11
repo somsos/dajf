@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProductAddRequest } from '../io/ProductAddRequest';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { ProductResponse } from '../../../../domain/product/visible/io/ProductResponse';
 import { Router } from '@angular/router';
 
@@ -22,7 +22,11 @@ export class ProductFormComponent implements OnInit {
   type!: string;
 
   @Input()
-  actionReq: Observable<ProductResponse> | undefined;
+  actionReq$: Observable<ProductResponse> | undefined;
+
+  @Input()
+  readReq$: Observable<ProductResponse> | undefined;
+  productFound?: ProductResponse;
 
   @Output()
   onSubmitForm = new EventEmitter<ProductAddRequest>();
@@ -37,12 +41,15 @@ export class ProductFormComponent implements OnInit {
 
   private _images?: FileList;
 
-  private _router = inject(Router);
-
   ngOnInit(): void {
+    this._setupForm();
+  }
+
+  private _setupForm() {
     console.debug('form product type', this.type);
     switch (this.type) {
       case 'add':
+        this._setAddForm();
         break;
 
       case 'details':
@@ -51,9 +58,6 @@ export class ProductFormComponent implements OnInit {
 
       case 'update':
         this.btnSubmitLabel = 'update';
-        this.actionReq?.subscribe((pFound) => {
-          this._fillForm(pFound);
-        });
         break;
 
       default:
@@ -61,10 +65,27 @@ export class ProductFormComponent implements OnInit {
     }
   }
 
+  private _setAddForm() {
+    if (!this.readReq$) {
+      const productMock: ProductResponse = {
+        id: 0,
+        amount: 0,
+        images: [],
+        name: '',
+        price: 0,
+      };
+      this.productFound = productMock;
+    }
+  }
+
   private _setDetailsForm() {
-    this.btnSubmitLabel = 'back';
     this.productForm.disable();
-    this.actionReq?.subscribe((pFound) => {
+    this._watchReadProduct();
+  }
+
+  private _watchReadProduct() {
+    this.readReq$?.pipe(take(1)).subscribe((pFound) => {
+      this.productFound = pFound;
       this._fillForm(pFound);
     });
   }
@@ -97,9 +118,5 @@ export class ProductFormComponent implements OnInit {
 
   catchSelectedImages($event: FileList) {
     this._images = $event;
-  }
-
-  onBack() {
-    this._router.navigateByUrl('products');
   }
 }

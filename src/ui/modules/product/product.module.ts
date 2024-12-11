@@ -24,6 +24,7 @@ import { ProductImageDaoApi } from '../../../server/impl/ProductImageDaoApi';
 import { ProductFormAddComponent } from './product-form-add/product-form-add.component';
 import { ProductFormDetailsComponent } from './product-form-details/product-form-details.component';
 import { ProductFormUpdateComponent } from './product-form-update/product-form-update.component';
+import { ProductImagesListComponent } from './product-images-list/product-images-list.component';
 
 const dataSource = environment.mockData ? ProductApiMock : ProductApiImpl;
 const dataSourceImages = environment.mockData
@@ -37,6 +38,7 @@ const dataSourceImages = environment.mockData
     ProductFormAddComponent,
     ProductFormDetailsComponent,
     ProductFormUpdateComponent,
+    ProductImagesListComponent,
     ProductImagesFormComponent,
   ],
   imports: [
