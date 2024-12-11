@@ -1,4 +1,4 @@
-<form [formGroup]="productForm" (ngSubmit)="onSubmit()" class='form-container'>
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()" class='form-container' >
 
   <mat-form-field class="example-full-width">
     <mat-label for="name">Name:</mat-label>
@@ -19,12 +19,19 @@
   <product-images-form (onSelectedImages)="catchSelectedImages($event)" />
 
   <div>
-    @if (!savingReq) {
-      <button mat-button (click)="productForm.reset()">Clean</button>
-      <button mat-button [disabled]="!productForm.valid">Save</button>
+    @if (!actionReq) {
+      @if (type == 'add' || type == 'update') {
+        <button mat-button (click)="productForm.reset()">Clean</button>
+        <button mat-button [disabled]="!productForm.valid">{{btnSubmitLabel}}</button>
+      }
     } @else {
       <my-spinner />
     }
   </div>
 
 </form>
+
+@if (type == 'details') {
+  <button mat-button (click)="onBack()">Back</button>
+}
+

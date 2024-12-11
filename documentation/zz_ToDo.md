@@ -29,7 +29,8 @@ X = finished
     - [X] show saving in progress spinner
     - [X] add images
     - [X] show login in progress spinner
-  - [>] Details
+  - [X] Details
+    - [>] Show images
   - [ ] Delete
   - [ ] Update
   - [ ] Connect to server

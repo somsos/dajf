@@ -27,7 +27,7 @@ import { MatSort } from '@angular/material/sort';
   styleUrl: './product-list.component.scss',
 })
 export class ProductListComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['id', 'name', 'price', 'amount'];
+  displayedColumns: string[] = ['id', 'name', 'price', 'amount', 'update'];
   productsPageReq$ = new Observable<FindProductsPageResponse>();
   tableContent = new MatTableDataSource<ProductResponse>();
   Arr = Array;

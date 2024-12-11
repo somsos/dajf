@@ -63,6 +63,9 @@ export class ProductApiMock implements IProductApi {
         return this._imgSrv.saveImages(saved.id, imagesTemp);
       }),
       switchMap((images) => {
+        if (!toSave.images) {
+          toSave.images = [];
+        }
         images.forEach((imageId) => {
           toSave.images.push(imageId);
         });
@@ -70,5 +73,10 @@ export class ProductApiMock implements IProductApi {
       })
     );
     return reqSaveUser;
+  }
+
+  findById(id: number): Observable<ProductResponse> {
+    const found = this._mockData.filter((p) => p.id == id)[0];
+    return of(found).pipe(delay(environment.longDelay));
   }
 }

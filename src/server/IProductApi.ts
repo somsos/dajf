@@ -14,4 +14,6 @@ export interface IProductApi {
   findPage(req: FindProductsPageRequest): Observable<FindProductsPageResponse>;
 
   save(reqInfo: ProductAddRequest): Observable<ProductResponse>;
+
+  findById(id: number): Observable<ProductResponse>;
 }

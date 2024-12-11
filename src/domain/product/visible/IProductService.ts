@@ -10,4 +10,6 @@ export interface IProductService {
   findPage(req: FindProductsPageRequest): Observable<FindProductsPageResponse>;
 
   save(reqInfo: ProductAddRequest): Observable<ProductResponse>;
+
+  findById(idParam: number): Observable<ProductResponse>;
 }

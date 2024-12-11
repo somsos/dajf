@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { delay, Observable, of } from 'rxjs';
 import { IProductService } from '../visible/IProductService';
 import { Inject, Injectable } from '@angular/core';
 import { IProductApi, productApiName } from '../../../server/IProductApi';
@@ -20,5 +20,9 @@ export class ProductServiceImpl implements IProductService {
 
   public save(reqInfo: ProductAddRequest): Observable<ProductResponse> {
     return this._api.save(reqInfo);
+  }
+
+  findById(id: number): Observable<ProductResponse> {
+    return this._api.findById(id);
   }
 }
