@@ -25,18 +25,18 @@ X = finished
 - [>] Crud products
   - [X] List
     - [X] Controls for page navigation
-  - [>] Add
+  - [X] Add
     - [X] show saving in progress spinner
     - [X] add images
     - [X] show login in progress spinner
   - [X] Details
     - [X] Show images
   - [X] Delete
-  - [>] Update
-  - [ ] Connect to server
-    - [ ] List
-    - [ ] Add
-    - [ ] Details
+  - [X] Update
+  - [>] Connect to server
+    - [X] List
+    - [X] Add
+    - [>] Details
       - [ ] Show images
     - [ ] Delete
     - [ ] Update

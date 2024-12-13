@@ -14,4 +14,6 @@ export interface IProductService {
   findById(idParam: number): Observable<ProductResponse>;
 
   deleteById(productId: number): Observable<ProductResponse>;
+
+  update(diff: any): Observable<ProductResponse>;
 }

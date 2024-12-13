@@ -42,4 +42,8 @@ export class ProductApiImpl implements IProductApi {
   deleteById(productId: number): Observable<ProductResponse> {
     throw new Error('Method not implemented.');
   }
+
+  update(diff: any): Observable<ProductResponse> {
+    throw new Error('Method not implemented.');
+  }
 }

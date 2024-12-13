@@ -18,4 +18,6 @@ export interface IProductApi {
   findById(id: number): Observable<ProductResponse>;
 
   deleteById(productId: number): Observable<ProductResponse>;
+
+  update(diff: any): Observable<ProductResponse>;
 }

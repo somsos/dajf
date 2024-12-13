@@ -1,6 +1,6 @@
 import { Component, Inject, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, take } from 'rxjs';
+import { first, Observable, take } from 'rxjs';
 import { ProductResponse } from '../../../../domain/product/visible/io/ProductResponse';
 import {
   ProductServiceName,
@@ -10,6 +10,9 @@ import { DialogService } from '../../../commons/DialogService';
 import { Store } from '@ngrx/store';
 import { showSnackBack } from '../../../../state/userMessages/msgs.actions';
 import { IMessage } from '../../../../state/userMessages/dto/UserMessage';
+import { ProductAddRequest } from '../io/ProductAddRequest';
+import { ObjectUtils } from '../../../../domain/common/ObjectUtils';
+import { updateErr1 } from '../product-constants';
 
 @Component({
   selector: 'app-product-form-update',
@@ -22,11 +25,13 @@ export class ProductFormUpdateComponent implements OnInit {
   private _store = inject(Store<any>);
   private _router = inject(Router);
 
-  private productId = 0;
-
   public findByIdReq$?: Observable<ProductResponse>;
   public delReq$?: Observable<ProductResponse>;
+  public updateReq$?: Observable<ProductResponse>;
   public delLoading = false;
+
+  private _productId = 0;
+  private _oldProduct?: ProductResponse;
 
   constructor(@Inject(ProductServiceName) private _srv: IProductService) {}
 
@@ -37,20 +42,42 @@ export class ProductFormUpdateComponent implements OnInit {
   }
 
   private _findProductById(idParam: string | null) {
-    this.productId = parseInt(idParam ?? 'null');
-    if (typeof this.productId !== 'number') {
+    this._productId = parseInt(idParam ?? 'null');
+    if (typeof this._productId !== 'number') {
       return;
     }
 
     console.debug('idParam', idParam);
-    this.findByIdReq$ = this._srv.findById(this.productId);
+    this.findByIdReq$ = this._srv.findById(this._productId);
     this.findByIdReq$.pipe(take(1)).subscribe({
-      complete: () => {
-        setTimeout(() => {
-          //this.findByIdReq$ = undefined;
-        }, 200);
+      next: (found) => {
+        this._oldProduct = found;
       },
     });
+  }
+
+  update(newProduct: ProductAddRequest) {
+    let diff = this._getProductInfoNew(newProduct);
+    if (!diff) {
+      this._store.dispatch(showSnackBack(updateErr1));
+      return;
+    }
+    diff.id = this._productId;
+    this.updateReq$ = this._srv.update(diff).pipe(first());
+    this.updateReq$.subscribe({
+      complete: () => {
+        this._router.navigateByUrl('products');
+      },
+    });
+  }
+
+  private _getProductInfoNew(newProduct: ProductAddRequest): any | undefined {
+    const diff = ObjectUtils.reduceToDiff(this._oldProduct, newProduct);
+    ObjectUtils.removeEmptyProps(diff, ['images']);
+    if (Object.keys(diff).length == 0) {
+      return undefined;
+    }
+    return diff;
   }
 
   async deleteById() {
@@ -61,7 +88,7 @@ export class ProductFormUpdateComponent implements OnInit {
     }
 
     this.delLoading = true;
-    this.delReq$ = this._srv.deleteById(this.productId);
+    this.delReq$ = this._srv.deleteById(this._productId);
     this.delReq$.subscribe({
       complete: () => {
         console.debug('deletion complete');

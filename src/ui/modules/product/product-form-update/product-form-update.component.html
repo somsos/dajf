@@ -1,9 +1,10 @@
 <ng-content>
-  <product-form type='details' [readReq$]='findByIdReq$' />
-
-  @if(findByIdReq$ | async; as p) {
-    <product-images-list [images]='p.images' />
-  }
+  <product-form
+    type='update'
+    [readReq$]='findByIdReq$'
+    [actionReq$]='updateReq$'
+    (onSubmitForm)="update($event)"
+  />
 
   <div>
   @if (!delLoading) {

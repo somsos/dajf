@@ -1,4 +1,4 @@
-import { delay, Observable, of, take } from 'rxjs';
+import { delay, Observable, of, take, throwError } from 'rxjs';
 import { IProductService } from '../visible/IProductService';
 import { Inject, Injectable } from '@angular/core';
 import { IProductApi, productApiName } from '../../../server/IProductApi';
@@ -6,6 +6,7 @@ import { FindProductsPageRequest } from '../visible/io/FindProductsPageRequest';
 import { FindProductsPageResponse } from '../visible/io/FindProductsPageResponse';
 import { ProductAddRequest } from '../../../ui/modules/product/io/ProductAddRequest';
 import { ProductResponse } from '../visible/io/ProductResponse';
+import { unexpected } from '../../../ui/modules/product/product-constants';
 
 @Injectable({ providedIn: 'root' })
 export class ProductServiceImpl implements IProductService {
@@ -27,5 +28,14 @@ export class ProductServiceImpl implements IProductService {
 
   deleteById(productId: number): Observable<ProductResponse> {
     return this._api.deleteById(productId).pipe(take(1));
+  }
+
+  update(diff: any): Observable<ProductResponse> {
+    if (diff.id == undefined || diff.id <= 0) {
+      return throwError(() => {
+        return unexpected('ProductServiceImpl.update -> diff.id -> required');
+      });
+    }
+    return this._api.update(diff).pipe(take(1));
   }
 }

@@ -27,6 +27,10 @@
       <product-images-form (onSelectedImages)="catchSelectedImages($event)" />
     }
 
+    @if (type == "details" || type == "update") {
+      <product-images-list [images]='productFound.images' />
+    }
+
     <div>
       @if (!actionReq$) {
         @if (type == 'add' || type == 'update') {

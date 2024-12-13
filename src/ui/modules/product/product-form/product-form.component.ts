@@ -1,16 +1,8 @@
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProductAddRequest } from '../io/ProductAddRequest';
 import { Observable, take } from 'rxjs';
 import { ProductResponse } from '../../../../domain/product/visible/io/ProductResponse';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'product-form',
@@ -26,6 +18,7 @@ export class ProductFormComponent implements OnInit {
 
   @Input()
   readReq$: Observable<ProductResponse> | undefined;
+
   productFound?: ProductResponse;
 
   @Output()
@@ -57,7 +50,7 @@ export class ProductFormComponent implements OnInit {
         break;
 
       case 'update':
-        this.btnSubmitLabel = 'update';
+        this._setUpdateForm();
         break;
 
       default:
@@ -81,6 +74,11 @@ export class ProductFormComponent implements OnInit {
   private _setDetailsForm() {
     this.productForm.disable();
     this._watchReadProduct();
+  }
+
+  private _setUpdateForm() {
+    this._watchReadProduct();
+    this.btnSubmitLabel = 'Actualizar';
   }
 
   private _watchReadProduct() {

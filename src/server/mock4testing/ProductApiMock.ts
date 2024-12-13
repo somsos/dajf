@@ -16,6 +16,7 @@ import { Inject, Injectable } from '@angular/core';
 import { IProductImageDao, productImageDaoName } from '../IProductImageDao';
 import { environment } from '../../environment/environment';
 import { ErrorDto } from '../../ui/commons/ErrorDto';
+import { ObjectUtils } from '../../domain/common/ObjectUtils';
 
 @Injectable({ providedIn: 'root' })
 export class ProductApiMock implements IProductApi {
@@ -93,13 +94,21 @@ export class ProductApiMock implements IProductApi {
     console.debug('product to delete: ' + id);
     return this.findById(id).pipe(
       switchMap((found) => {
-        if (!found) {
-          return throwError(() => {
-            return new ErrorDto('Producto a eliminar no encontrado', '');
-          });
-        }
         const filtered = this._mockData.filter((p) => p.id !== found.id);
         this._mockData = filtered;
+        return of(found).pipe(delay(environment.longDelay));
+      })
+    );
+  }
+
+  update(newInfo: any): Observable<ProductResponse> {
+    console.debug('product to update: ', newInfo);
+    return this.findById(newInfo.id).pipe(
+      switchMap((found) => {
+        const oldInfo = this._mockData.filter((p) => p.id == found.id)[0];
+        const merged = ObjectUtils.overwrite(oldInfo, newInfo);
+        const index = this._mockData.findIndex((p) => p.id == found.id);
+        this._mockData[index] = merged;
         return of(found).pipe(delay(environment.longDelay));
       })
     );
