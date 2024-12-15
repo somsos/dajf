@@ -7,8 +7,10 @@ import { environment } from '../environment/environment';
 
 export const productApiName = 'ProductApi';
 
+//these endpoint are used in http interceptors to add the token
 export const endpointProducts = environment.host + '/products';
 export const endpointProductsPage = endpointProducts + '/page';
+export const endpointProductImage = endpointProducts + '/image/{$id}';
 
 export interface IProductApi {
   findPage(req: FindProductsPageRequest): Observable<FindProductsPageResponse>;

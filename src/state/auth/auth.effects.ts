@@ -16,6 +16,7 @@ import { UserModel } from '../../domain/user/external/UserModel';
 import { ErrorDto } from '../../ui/commons/ErrorDto';
 import { showSnackBack } from '../userMessages/msgs.actions';
 import { IMessage } from '../userMessages/dto/UserMessage';
+import { LoginResponse } from '../../domain/user/external/io/LoginResponse';
 
 /*
 exhaustMap(() => this.moviesService.getAll()
@@ -29,7 +30,7 @@ exhaustMap(() => this.moviesService.getAll()
 @Injectable()
 export class AuthEffects {
   readonly loginRequest$: Observable<Action<string>> & CreateEffectMetadata;
-  readonly setAuthUser$: Observable<UserModel> & CreateEffectMetadata;
+  readonly setAuthUser$: Observable<LoginResponse> & CreateEffectMetadata;
   readonly logout$: Observable<void> & CreateEffectMetadata;
 
   constructor(
@@ -51,7 +52,7 @@ export class AuthEffects {
           map((d) => d as any as LoginRequest),
           exhaustMap((reqInfo) => {
             const req = this._srv.login(reqInfo).pipe(
-              map((authUser) => setAutUser(authUser.user)),
+              map((authUser) => setAutUser(authUser)),
               catchError((err) => this._handleServerError(err))
             );
             return req;
@@ -62,16 +63,15 @@ export class AuthEffects {
     );
   }
 
-  _setSetAuthUser(): Observable<UserModel> & CreateEffectMetadata {
+  _setSetAuthUser(): Observable<LoginResponse> & CreateEffectMetadata {
     return createEffect(
       () =>
         this.actions$.pipe(
           ofType(AuthActionsNames.SetAuthUser),
-          map((d) => d as any as UserModel),
-          tap((assignedUser) => {
-            const route = UserModel.getLoginRedirectRouteByRole(
-              assignedUser.roles
-            );
+          map((d) => d as any as LoginResponse),
+          tap((logResp) => {
+            const userRoles = logResp.user.roles;
+            const route = UserModel.getLoginRedirectRouteByRole(userRoles);
             this._router.navigateByUrl(route);
           })
         ),

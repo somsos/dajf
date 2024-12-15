@@ -2,20 +2,25 @@ export class ErrorDto {
   constructor(
     public message: string,
     public cause: string,
+    public handled: boolean,
     public messages?: string[]
   ) {}
 
   static fromServer(err: any): ErrorDto {
     if (!err.message) {
-      return new ErrorDto('Error, intente mas tarde o contacte admin', '');
+      return new ErrorDto(
+        'Error, intente mas tarde o contacte admin',
+        '',
+        false
+      );
     }
 
     if (!err.cause) {
-      return new ErrorDto(err.message, '');
+      return new ErrorDto(err.message, '', false);
     }
 
     if (!err.causes) {
-      return new ErrorDto(err.message, err.cause, []);
+      return new ErrorDto(err.message, err.cause, false, []);
     }
 
     return new ErrorDto(err.message, err.cause, err.causes);
@@ -37,6 +42,6 @@ export class ErrorDto {
       cause = error.cause;
     }
 
-    return new ErrorDto(msg, cause);
+    return new ErrorDto(msg, cause, false);
   }
 }

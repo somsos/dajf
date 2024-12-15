@@ -1,4 +1,4 @@
-import { delay, Observable, take, tap } from 'rxjs';
+import { delay, map, Observable, take } from 'rxjs';
 import { FindProductsPageRequest } from '../../domain/product/visible/io/FindProductsPageRequest';
 import { FindProductsPageResponse } from '../../domain/product/visible/io/FindProductsPageResponse';
 import {
@@ -11,6 +11,7 @@ import { inject } from '@angular/core';
 import { ProductResponse } from '../../domain/product/visible/io/ProductResponse';
 import { ProductAddRequest } from '../../ui/modules/product/io/ProductAddRequest';
 import { environment } from '../../environment/environment';
+import { ProductActionResponse } from '../io/ProductActionResponse';
 
 export class ProductApiImpl implements IProductApi {
   private readonly _http = inject(HttpClient);
@@ -20,7 +21,7 @@ export class ProductApiImpl implements IProductApi {
     const options = { params: params };
     return this._http
       .get<FindProductsPageResponse>(endpointProductsPage, options)
-      .pipe(take(1), delay(environment.shortDelay));
+      .pipe(delay(environment.shortDelay));
   }
 
   save(reqInfo: ProductAddRequest): Observable<ProductResponse> {
@@ -36,14 +37,33 @@ export class ProductApiImpl implements IProductApi {
   }
 
   findById(id: number): Observable<ProductResponse> {
-    throw new Error('Method not implemented.');
+    return this._http
+      .get<ProductResponse>(endpointProducts + '/' + id)
+      .pipe(delay(environment.shortDelay));
   }
 
-  deleteById(productId: number): Observable<ProductResponse> {
-    throw new Error('Method not implemented.');
+  deleteById(id: number): Observable<ProductResponse> {
+    return this._http
+      .delete<ProductActionResponse>(endpointProducts + '/' + id)
+      .pipe(
+        delay(environment.shortDelay),
+        map(() => {
+          const mapped: ProductResponse = {
+            id: id,
+            name: '',
+            amount: 0,
+            images: [],
+            price: 0,
+          };
+          return mapped;
+        })
+      );
   }
 
   update(diff: any): Observable<ProductResponse> {
-    throw new Error('Method not implemented.');
+    const url = endpointProducts + '/' + diff.id;
+    return this._http
+      .put<ProductResponse>(url, diff)
+      .pipe(delay(environment.shortDelay));
   }
 }

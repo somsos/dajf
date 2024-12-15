@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProductAddRequest } from '../io/ProductAddRequest';
-import { Observable, take } from 'rxjs';
+import { filter, Observable, take } from 'rxjs';
 import { ProductResponse } from '../../../../domain/product/visible/io/ProductResponse';
 
 @Component({
@@ -23,6 +23,9 @@ export class ProductFormComponent implements OnInit {
 
   @Output()
   onSubmitForm = new EventEmitter<ProductAddRequest>();
+
+  @Output()
+  onProductFoundOut = new EventEmitter<ProductResponse>();
 
   productForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -82,10 +85,16 @@ export class ProductFormComponent implements OnInit {
   }
 
   private _watchReadProduct() {
-    this.readReq$?.pipe(take(1)).subscribe((pFound) => {
-      this.productFound = pFound;
-      this._fillForm(pFound);
-    });
+    this.readReq$
+      ?.pipe(
+        take(1),
+        filter((p) => p != undefined)
+      )
+      .subscribe((pFound) => {
+        this.productFound = pFound;
+        this.onProductFoundOut.emit(pFound);
+        this._fillForm(pFound);
+      });
   }
 
   private _fillForm(pFound: ProductResponse) {

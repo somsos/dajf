@@ -1,17 +1,28 @@
 import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { lastValueFrom, map, Observable, take, switchMap } from 'rxjs';
-import { selectLogged } from '../../../state/auth/auth.selectors';
-import { endpointProducts } from '../../../server/IProductApi';
+import {
+  lastValueFrom,
+  map,
+  Observable,
+  take,
+  switchMap,
+  throwError,
+} from 'rxjs';
+import { selectToken } from '../../../state/auth/auth.selectors';
+import {
+  endpointProducts,
+  endpointProductImage,
+} from '../../../server/IProductApi';
 
 interface Endpoint {
-  method: 'get' | 'post' | 'put' | 'delete';
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   url: string;
 }
 
 const routesToAddToken: Endpoint[] = [
-  { method: 'post', url: endpointProducts },
+  { method: 'POST', url: endpointProducts },
+  { method: 'DELETE', url: endpointProductImage },
 ];
 
 export function tokenInterceptor(
@@ -19,23 +30,27 @@ export function tokenInterceptor(
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> {
   const isForAdd =
-    routesToAddToken.filter(
-      (ep) => ep.method == req.method && ep.url == req.url
-    ).length > 0;
+    routesToAddToken.filter((ep) => {
+      const urlAndMethodMatch = ep.method == req.method && ep.url == req.url;
+      const methodIsDelete = req.method == 'DELETE';
+      return urlAndMethodMatch || methodIsDelete;
+    }).length > 0;
   if (isForAdd == false) {
     return next(req);
   }
 
   const store = inject(Store<any>);
-  return store.select(selectLogged).pipe(
-    switchMap((auth) => {
-      if (!auth) {
-        console.warn('expected to add token bet auth is undefined');
-        return next(req);
-      }
+  return store.select(selectToken).pipe(
+    switchMap((token) => {
       console.debug('adding token to request');
-      req.headers.set('token', 'aaa');
-      return next(req);
+      if (!token) {
+        console.warn('expected to add token bet auth is undefined');
+        return throwError(() => new Error('permisos insuficientes'));
+      }
+      const reqWToken = req.clone({
+        headers: req.headers.set('Authorization', `Bearer ${token}`),
+      });
+      return next(reqWToken);
     })
   );
 }

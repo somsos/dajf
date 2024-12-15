@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { UserModel } from '../../domain/user/external/UserModel';
 import { LoginRequest } from '../../domain/user/external/io/LoginRequest';
+import { LoginResponse } from '../../domain/user/external/io/LoginResponse';
 
 export const AuthActionsNames = {
   LoginRequest: '[Auth] Request Login',
@@ -15,7 +16,7 @@ export const loginRequest = createAction(
 
 export const setAutUser = createAction(
   AuthActionsNames.SetAuthUser,
-  props<UserModel>()
+  props<LoginResponse>()
 );
 
 export const clearAuthUser = createAction(AuthActionsNames.ClearAuthUser);

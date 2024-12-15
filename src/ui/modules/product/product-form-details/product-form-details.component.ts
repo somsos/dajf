@@ -33,7 +33,6 @@ export class ProductFormDetailsComponent implements OnInit {
     }
     console.debug('idParam', idParam);
     this.findByIdReq$ = this._srv.findById(id);
-    this.findByIdReq$.pipe(take(1)).subscribe();
   }
 
   onBack() {

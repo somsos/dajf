@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { environment } from '../../../../environment/environment';
+// TODO: concentrate constants in domain, becase server and ui depends on them.
+import { endpointProductImage } from '../../../../server/IProductApi';
 
 @Component({
   selector: 'product-images-list',
@@ -8,7 +10,7 @@ import { environment } from '../../../../environment/environment';
 })
 export class ProductImagesListComponent implements OnInit {
   @Input()
-  public images: Array<number> = [];
+  public ids: Array<number> = [];
 
   public urls: string[] = [];
 
@@ -17,11 +19,12 @@ export class ProductImagesListComponent implements OnInit {
   }
 
   private _generateUrls(): void {
-    this.images.forEach((imgId) => {
+    this.ids.forEach((ids) => {
       if (environment.mockData) {
-        this.urls.push('favicon.ico?id=' + imgId);
+        this.urls.push('favicon.ico?id=' + ids);
       } else {
-        throw new Error('Not implemented');
+        const url = endpointProductImage.replace('{$id}', ids + '');
+        this.urls.push(url);
       }
     });
   }

@@ -21,6 +21,7 @@ import {
 } from '@angular/common/http';
 import { tokenInterceptor } from './interceptors/tokenInterceptor';
 import { localStorageSync } from 'ngrx-store-localstorage';
+import { errorInterceptor } from './interceptors/errorInterseptor';
 
 export function localStorageSyncReducer(
   reducer: ActionReducer<any>
@@ -57,7 +58,10 @@ export const appConfig: ApplicationConfig = {
     }),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([tokenInterceptor, errorInterceptor])
+    ),
     ...domainDeps,
   ],
 };

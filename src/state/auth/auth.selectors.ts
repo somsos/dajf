@@ -7,3 +7,5 @@ export const selectLogged = createSelector(
   selectAuth,
   (auth) => auth?.userAuth
 );
+
+export const selectToken = createSelector(selectAuth, (auth) => auth?.token);

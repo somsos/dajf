@@ -28,7 +28,6 @@ X = finished
   - [X] Add
     - [X] show saving in progress spinner
     - [X] add images
-    - [X] show login in progress spinner
   - [X] Details
     - [X] Show images
   - [X] Delete
@@ -36,10 +35,14 @@ X = finished
   - [>] Connect to server
     - [X] List
     - [X] Add
-    - [>] Details
-      - [ ] Show images
-    - [ ] Delete
+    - [X] Details
+      - [X] Show images
+    - [>] Delete
     - [ ] Update
+  - [ ] Bugs
+    - [ ] Show login in progress spinner
+    - [ ] General error handeling using for reactive side
+    - [ ] Show error of invalid token
 - [ ] Crud user
   - [ ] List users
   - [ ] Add user

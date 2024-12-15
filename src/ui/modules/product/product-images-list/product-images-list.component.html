@@ -1,6 +1,6 @@
 <div id='images-product-container'>
-  @for (img of images; track img) {
-    <img src='favicon.ico?id={{img}}' height='100' width='100' />
+  @for (url of urls; track url) {
+    <img [src]='url' height='100' width='100' />
   } @empty {
     <p>Sin imagenes</p>
   }

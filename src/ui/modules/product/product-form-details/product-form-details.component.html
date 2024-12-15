@@ -1,10 +1,5 @@
 <ng-content>
   <product-form type='details' [readReq$]='findByIdReq$' />
-
-  @if(findByIdReq$ | async; as p) {
-    <product-images-list [images]='p.images' />
-  }
   <button mat-button (click)="onBack()">Atras</button>
-
 </ng-content>
 
