@@ -37,12 +37,12 @@ X = finished
     - [X] Add
     - [X] Details
       - [X] Show images
-    - [>] Delete
-    - [ ] Update
+    - [X] Delete
+    - [X] Update
   - [ ] Bugs
     - [ ] Show login in progress spinner
     - [ ] General error handeling using for reactive side
-    - [ ] Show error of invalid token
+    - [X] handle token expired
 - [ ] Crud user
   - [ ] List users
   - [ ] Add user

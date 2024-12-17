@@ -1,25 +1,11 @@
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandlerFn,
-  HttpRequest,
-} from '@angular/common/http';
+import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {
-  lastValueFrom,
-  map,
-  Observable,
-  take,
-  switchMap,
-  catchError,
-  EMPTY,
-  throwError,
-} from 'rxjs';
-import { selectLogged } from '../../../state/auth/auth.selectors';
+import { EMPTY, Observable, catchError, throwError } from 'rxjs';
 import { showSnackBack } from '../../../state/userMessages/msgs.actions';
-import { IMessage } from '../../../state/userMessages/dto/UserMessage';
 import { ErrorDto } from '../../commons/ErrorDto';
+import { Router } from '@angular/router';
+import { clearAuthUser } from '../../../state/auth/auth.actions';
 
 export function errorInterceptor(
   req: HttpRequest<unknown>,
@@ -29,21 +15,15 @@ export function errorInterceptor(
   return next(req).pipe(
     catchError((error: any) => {
       console.warn('response error caught', error);
-      const msg = getUserMessageFromErrorResponse(error);
+      const msg = ErrorDto.fromServer(error);
       store.dispatch(showSnackBack(msg));
+      if (ErrorDto.isTokenExpiredError(msg)) {
+        store.dispatch(clearAuthUser());
+        return EMPTY;
+      }
+
       const handledError = new ErrorDto(msg.message, error.message ?? '', true);
       return throwError(() => handledError);
     })
   );
-}
-
-function getUserMessageFromErrorResponse(error: any): IMessage {
-  let userMsg = 'Error inesperado';
-  if (error instanceof HttpErrorResponse) {
-    if (error.status == 403) {
-      userMsg = 'Permisos insuficientes, contacte admins';
-    }
-  }
-  const msg: IMessage = { message: userMsg, actionLabel: 'Ok' };
-  return msg;
 }

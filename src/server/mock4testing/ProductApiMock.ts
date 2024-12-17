@@ -15,7 +15,6 @@ import { ProductAddRequest } from '../../ui/modules/product/io/ProductAddRequest
 import { Inject, Injectable } from '@angular/core';
 import { IProductImageDao, productImageDaoName } from '../IProductImageDao';
 import { environment } from '../../environment/environment';
-import { ErrorDto } from '../../ui/commons/ErrorDto';
 import { ObjectUtils } from '../../domain/common/ObjectUtils';
 
 @Injectable({ providedIn: 'root' })

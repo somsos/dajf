@@ -10,7 +10,10 @@ import { map, exhaustMap, catchError, tap, filter } from 'rxjs/operators';
 import { AuthActionsNames, setAutUser } from './auth.actions';
 import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';
-import { IUserService } from '../../domain/user/external/IUserService';
+import {
+  IUserService,
+  userServiceName,
+} from '../../domain/user/external/IUserService';
 import { LoginRequest } from '../../domain/user/external/io/LoginRequest';
 import { UserModel } from '../../domain/user/external/UserModel';
 import { ErrorDto } from '../../ui/commons/ErrorDto';
@@ -35,7 +38,7 @@ export class AuthEffects {
 
   constructor(
     private _store: Store<any>,
-    @Inject('UserService') private _srv: IUserService,
+    @Inject(userServiceName) private _srv: IUserService,
     private actions$: Actions,
     private _router: Router
   ) {

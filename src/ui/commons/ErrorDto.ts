@@ -1,29 +1,38 @@
+import { HttpErrorResponse } from '@angular/common/http';
+import { IMessage } from '../../state/userMessages/dto/UserMessage';
+
 export class ErrorDto {
+  private static tokenExpired = 'expired';
+
   constructor(
     public message: string,
     public cause: string,
-    public handled: boolean,
+    public handled: boolean = false,
     public messages?: string[]
   ) {}
 
-  static fromServer(err: any): ErrorDto {
-    if (!err.message) {
-      return new ErrorDto(
-        'Error, intente mas tarde o contacte admin',
-        '',
-        false
-      );
+  static fromServer(error: any): IMessage {
+    let userMsg = 'Error inesperado';
+    let lb = 'ok';
+    if (error?.error.cause == ErrorDto.tokenExpired) {
+      return { message: ErrorDto.tokenExpired, actionLabel: lb };
     }
 
-    if (!err.cause) {
-      return new ErrorDto(err.message, '', false);
+    if (error instanceof HttpErrorResponse) {
+      if (error.status == 403) {
+        userMsg = 'Permisos insuficientes, contacte admins';
+      }
     }
 
-    if (!err.causes) {
-      return new ErrorDto(err.message, err.cause, false, []);
+    if (error.message && typeof error.message == 'string') {
+      userMsg = error.message;
     }
 
-    return new ErrorDto(err.message, err.cause, err.causes);
+    if (!error.cause) {
+      console.warn(error.cause);
+    }
+
+    return { message: userMsg, actionLabel: lb };
   }
 
   static fromAny(error: any): ErrorDto {
@@ -44,4 +53,15 @@ export class ErrorDto {
 
     return new ErrorDto(msg, cause, false);
   }
+
+  static isTokenExpiredError(msg: IMessage): boolean {
+    if (msg.message == ErrorDto.tokenExpired) {
+      return true;
+    }
+    return false;
+  }
 }
+
+const userMsg = 'permisos insuficientes';
+const cause = 'token required but there is not token saved';
+export const tokenDoNotExist = new ErrorDto(userMsg, cause);

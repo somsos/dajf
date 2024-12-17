@@ -1,6 +1,5 @@
-import { Observable, of, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IUserService } from '../external/IUserService';
-import { UserModel } from '../external/UserModel';
 import { LoginRequest } from '../external/io/LoginRequest';
 import { Inject, Injectable } from '@angular/core';
 import { IAuthApi } from '../../../server/IAuthApi';

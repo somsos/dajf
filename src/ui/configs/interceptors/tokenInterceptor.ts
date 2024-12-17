@@ -14,6 +14,8 @@ import {
   endpointProducts,
   endpointProductImage,
 } from '../../../server/IProductApi';
+import { UrlUtils } from '../../../domain/common/UrlUtils';
+import { ErrorDto, tokenDoNotExist } from '../../commons/ErrorDto';
 
 interface Endpoint {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -23,20 +25,16 @@ interface Endpoint {
 const routesToAddToken: Endpoint[] = [
   { method: 'POST', url: endpointProducts },
   { method: 'DELETE', url: endpointProductImage },
+  { method: 'PUT', url: endpointProducts + '/1' },
 ];
 
 export function tokenInterceptor(
-  req: HttpRequest<unknown>,
+  currentReq: HttpRequest<unknown>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> {
-  const isForAdd =
-    routesToAddToken.filter((ep) => {
-      const urlAndMethodMatch = ep.method == req.method && ep.url == req.url;
-      const methodIsDelete = req.method == 'DELETE';
-      return urlAndMethodMatch || methodIsDelete;
-    }).length > 0;
-  if (isForAdd == false) {
-    return next(req);
+  const candidateToAddToken = compareWithUrlsToAddToken(currentReq);
+  if (candidateToAddToken == false) {
+    return next(currentReq);
   }
 
   const store = inject(Store<any>);
@@ -44,13 +42,28 @@ export function tokenInterceptor(
     switchMap((token) => {
       console.debug('adding token to request');
       if (!token) {
-        console.warn('expected to add token bet auth is undefined');
-        return throwError(() => new Error('permisos insuficientes'));
+        return throwError(() => tokenDoNotExist);
       }
-      const reqWToken = req.clone({
-        headers: req.headers.set('Authorization', `Bearer ${token}`),
+      const reqWToken = currentReq.clone({
+        headers: currentReq.headers.set('Authorization', `Bearer ${token}`),
       });
       return next(reqWToken);
     })
   );
+}
+
+function compareWithUrlsToAddToken(currentReq: HttpRequest<unknown>): boolean {
+  for (let i = 0; i < routesToAddToken.length; i++) {
+    const pathToAddToken = routesToAddToken[i];
+    const matchMethod = pathToAddToken.method == currentReq.method;
+    const simplifiedCurrentUrl = UrlUtils.reduceParams(currentReq.url);
+    const matchPath = pathToAddToken.url == simplifiedCurrentUrl;
+    const matchRequest = matchMethod && matchPath;
+    const methodIsDelete = currentReq.method == 'DELETE';
+    const candidateToAddToken = matchRequest || methodIsDelete;
+    if (candidateToAddToken == true) {
+      return true;
+    }
+  }
+  return false;
 }

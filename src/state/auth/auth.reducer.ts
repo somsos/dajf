@@ -7,14 +7,11 @@ export interface AuthState {
   token?: string;
 }
 
-export const authInitialState: AuthState = {
-  //userAuth: new UserModel(1, 'some', [], undefined),
-  userAuth: undefined,
-};
+export const authInitialState: AuthState = {};
 
 export const authReducer = createReducer(
   authInitialState,
-  on(clearAuthUser, (state) => ({ ...state, userAuth: undefined })),
+  on(clearAuthUser, (state) => authInitialState),
   on(setAutUser, (state, authResp) => {
     const newState = {
       ...state,
