@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProductAddRequest } from '../io/ProductAddRequest';
 import { filter, Observable, take } from 'rxjs';
@@ -22,10 +32,10 @@ export class ProductFormComponent implements OnInit {
   productFound?: ProductResponse;
 
   @Output()
-  onSubmitForm = new EventEmitter<ProductAddRequest>();
+  readonly onSubmitForm = new EventEmitter<ProductAddRequest>();
 
   @Output()
-  onProductFoundOut = new EventEmitter<ProductResponse>();
+  readonly onProductFoundOut = new EventEmitter<ProductResponse>();
 
   productForm = new FormGroup({
     name: new FormControl('', [Validators.required]),

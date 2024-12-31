@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProductRoutingModule } from './product-routing.module';
 import { ProductListComponent } from './product-list/product-list.component';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { ProductFormComponent } from './product-form/product-form.component';
@@ -14,7 +15,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ProductImagesFormComponent } from './product-images-form/product-images-form.component';
 import { SpinnerComponent } from '../../standalone/common/spinner/spinner.component';
 import { productApiName } from '../../../server/IProductApi';
 import { ProductServiceName } from '../../../domain/product/visible/IProductService';
@@ -39,9 +39,9 @@ const dataSourceImages = environment.mockData
     ProductFormDetailsComponent,
     ProductFormUpdateComponent,
     ProductImagesListComponent,
-    ProductImagesFormComponent,
   ],
   imports: [
+    MatIconModule,
     SpinnerComponent,
     MatInputModule,
     MatFormFieldModule,

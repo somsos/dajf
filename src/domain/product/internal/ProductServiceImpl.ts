@@ -38,4 +38,12 @@ export class ProductServiceImpl implements IProductService {
     }
     return this._api.update(diff).pipe(take(1));
   }
+
+  deleteImageById(idImage: number): Observable<number> {
+    return this._api.deleteImageById(idImage);
+  }
+
+  uploadImage(id: number, file: File): Observable<number> {
+    return this._api.uploadImage(id, file);
+  }
 }

@@ -3,6 +3,6 @@ export const environment = {
   apiKey: 'devKey',
   host: 'http://localhost:8080',
   mockData: false,
-  longDelay: 50,
-  shortDelay: 25,
+  longDelay: 1000,
+  shortDelay: 250,
 };

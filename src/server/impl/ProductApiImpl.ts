@@ -1,9 +1,11 @@
-import { delay, map, Observable, take } from 'rxjs';
+import { delay, first, map, Observable, take } from 'rxjs';
 import { FindProductsPageRequest } from '../../domain/product/visible/io/FindProductsPageRequest';
 import { FindProductsPageResponse } from '../../domain/product/visible/io/FindProductsPageResponse';
 import {
+  endpointProductImage,
   endpointProducts,
   endpointProductsPage,
+  endpointUploadImage,
   IProductApi,
 } from '../IProductApi';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -29,11 +31,6 @@ export class ProductApiImpl implements IProductApi {
     reqInfo.images = undefined;
     console.log('images', images);
     return this._http.post<ProductResponse>(endpointProducts, reqInfo);
-    /*
-    .pipe(tap((resp) => {
-        resp.id
-      }));
-    */
   }
 
   findById(id: number): Observable<ProductResponse> {
@@ -65,5 +62,23 @@ export class ProductApiImpl implements IProductApi {
     return this._http
       .put<ProductResponse>(url, diff)
       .pipe(delay(environment.shortDelay));
+  }
+
+  deleteImageById(idImage: number): Observable<number> {
+    const url = endpointProductImage.replace('{$id}', idImage + ``);
+    return this._http.delete<ProductActionResponse>(url).pipe(
+      first(),
+      map((resp) => resp.id)
+    );
+  }
+
+  uploadImage(id: number, file: File): Observable<number> {
+    const url = endpointUploadImage.replace('{$id}', id + ``);
+    const formData = new FormData();
+    formData.append('image', file);
+    return this._http.post<ProductActionResponse>(url, formData).pipe(
+      first(),
+      map((resp) => resp.id)
+    );
   }
 }

@@ -18,7 +18,7 @@ export class AuthApiMock implements IAuthApi {
     const isAdmin = req.username == 'mario1' && req.password == 'mario1p';
     if (isAdmin) {
       const token = 'token1';
-      const role = { id: 2, authority: 'ROLE_users' };
+      const role = { id: 2, authority: 'ROLE_admin_users' };
       const user: UserModel = {
         id: 1,
         username: 'mario1',
@@ -30,7 +30,7 @@ export class AuthApiMock implements IAuthApi {
     const isCashier = req.username == 'mario2' && req.password == 'mario2p';
     if (isCashier) {
       const token = 'token2';
-      const role = { id: 2, authority: 'ROLE_products' };
+      const role = { id: 2, authority: 'ROLE_admin_products' };
       const user: UserModel = {
         id: 2,
         username: 'mario2',
@@ -42,7 +42,7 @@ export class AuthApiMock implements IAuthApi {
     const isStocker = req.username == 'mario3' && req.password == 'mario3p';
     if (isStocker) {
       const token = 'token3';
-      const role = { id: 2, authority: 'ROLE_cashier' };
+      const role = { id: 2, authority: 'ROLE_admin_sells' };
       const user: UserModel = {
         id: 3,
         username: 'mario3',

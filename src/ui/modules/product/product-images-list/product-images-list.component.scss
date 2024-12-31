@@ -5,3 +5,36 @@
   row-gap: 2rem;
   flex-wrap: wrap;
 }
+
+.image-container {
+  position: relative;
+  .image-buttons {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.add-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 200px;
+
+  input[type="file"] {
+    display: none;
+  }
+
+  .custom-image-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #d7e3ff;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+
+}

@@ -1,18 +1,24 @@
 <div>
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class='form-container'>
 
-    <div>
-      <label for="username">Username: </label>
-      <input id="username" type="text" formControlName="username" autocomplete='username'>
+    <mat-form-field class="example-full-width">
+      <mat-label for="username">Username:</mat-label>
+      <input matInput id="username" type="username" formControlName="username" autocomplete='username' />
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label for="password">Password:</mat-label>
+      <input matInput id="password" type="password" formControlName="password" autocomplete='current-password' />
+    </mat-form-field>
+
+    <div class='buttons'>
+      <p *ngIf="error" style='color: red;'>{{error}}</p>
+      @if (!isLoginSubmitLoading) {
+        <button mat-button (click)="onSubmit()" [disabled]="loginForm.invalid">Entrar</button>
+      } @else {
+        <my-spinner />
+      }
     </div>
 
-    <div>
-      <label for="password">Password: </label>
-      <input id="password" type="password" formControlName="password" autocomplete='current-password'>
-    </div>
-
-    <p *ngIf="error" style='color: red;'>{{error}}</p>
-
-    <div><input type='submit'></div>
   </form>
 </div>

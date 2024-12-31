@@ -22,6 +22,8 @@ import {
 import { tokenInterceptor } from './interceptors/tokenInterceptor';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { errorInterceptor } from './interceptors/errorInterseptor';
+import { loadingsReducer } from '../../state/loading/loading.reducer';
+import { loadingRequestInterceptor } from './interceptors/loadingRequestInterceptor';
 
 export function localStorageSyncReducer(
   reducer: ActionReducer<any>
@@ -41,6 +43,7 @@ export const appConfig: ApplicationConfig = {
         router: routerReducer,
         auth: authReducer,
         msgs: msgReducer,
+        loadings: loadingsReducer,
       },
       {
         metaReducers: metaReducers,
@@ -60,7 +63,11 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(
       withFetch(),
-      withInterceptors([tokenInterceptor, errorInterceptor])
+      withInterceptors([
+        loadingRequestInterceptor,
+        tokenInterceptor,
+        errorInterceptor,
+      ])
     ),
     ...domainDeps,
   ],

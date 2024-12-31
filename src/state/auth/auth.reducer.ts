@@ -9,7 +9,7 @@ export interface AuthState {
 
 export const authInitialState: AuthState = {};
 
-export const authReducer = createReducer(
+export const authReducer = createReducer<AuthState>(
   authInitialState,
   on(clearAuthUser, (state) => authInitialState),
   on(setAutUser, (state, authResp) => {

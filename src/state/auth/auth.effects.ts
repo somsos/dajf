@@ -6,7 +6,14 @@ import {
   ofType,
 } from '@ngrx/effects';
 import { EMPTY, Observable } from 'rxjs';
-import { map, exhaustMap, catchError, tap, filter } from 'rxjs/operators';
+import {
+  map,
+  exhaustMap,
+  catchError,
+  tap,
+  filter,
+  delay,
+} from 'rxjs/operators';
 import { AuthActionsNames, setAutUser } from './auth.actions';
 import { Router } from '@angular/router';
 import { Action, Store } from '@ngrx/store';

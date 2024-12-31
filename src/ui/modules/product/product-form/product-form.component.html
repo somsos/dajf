@@ -23,12 +23,12 @@
       <input matInput id="amount" type="number" formControlName="amount" >
     </mat-form-field>
 
-    @if (type != "details") {
-      <product-images-form (onSelectedImages)="catchSelectedImages($event)" />
-    }
-
     @if (type == "details" || type == "update") {
-      <product-images-list [ids]='productFound.images' />
+        <product-images-list
+          [ids]='productFound.images'
+        />
+    } @else {
+      <p style='text-align: center;'>Para agregar imagenes, usar el formulario de editar</p>
     }
 
     <div>

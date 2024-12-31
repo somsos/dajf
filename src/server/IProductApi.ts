@@ -11,8 +11,10 @@ export const productApiName = 'ProductApi';
 export const endpointProducts = environment.host + '/products';
 export const endpointProductsPage = endpointProducts + '/page';
 export const endpointProductImage = endpointProducts + '/image/{$id}';
+export const endpointUploadImage = endpointProducts + '/{$id}/image';
 
 export interface IProductApi {
+  uploadImage(id: number, file: File): Observable<number>;
   findPage(req: FindProductsPageRequest): Observable<FindProductsPageResponse>;
 
   save(reqInfo: ProductAddRequest): Observable<ProductResponse>;
@@ -22,4 +24,6 @@ export interface IProductApi {
   deleteById(productId: number): Observable<ProductResponse>;
 
   update(diff: any): Observable<ProductResponse>;
+
+  deleteImageById(idImage: number): Observable<number>;
 }

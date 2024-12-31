@@ -11,28 +11,17 @@ export class ErrorDto {
     public messages?: string[]
   ) {}
 
-  static fromServer(error: any): IMessage {
-    let userMsg = 'Error inesperado';
+  static fromServer(error: HttpErrorResponse): IMessage {
     let lb = 'ok';
-    if (error?.error.cause == ErrorDto.tokenExpired) {
-      return { message: ErrorDto.tokenExpired, actionLabel: lb };
+
+    const errorServer = ErrorDto.anyToErrorResponseOrThrow(error.error);
+
+    if (error.status == 403) {
+      const userMsg = 'Permisos insuficientes, contacte admins';
+      return { message: userMsg, actionLabel: lb };
     }
 
-    if (error instanceof HttpErrorResponse) {
-      if (error.status == 403) {
-        userMsg = 'Permisos insuficientes, contacte admins';
-      }
-    }
-
-    if (error.message && typeof error.message == 'string') {
-      userMsg = error.message;
-    }
-
-    if (!error.cause) {
-      console.warn(error.cause);
-    }
-
-    return { message: userMsg, actionLabel: lb };
+    return { message: errorServer.message, actionLabel: lb };
   }
 
   static fromAny(error: any): ErrorDto {
@@ -59,6 +48,24 @@ export class ErrorDto {
       return true;
     }
     return false;
+  }
+
+  static anyToErrorResponseOrThrow(error: any): ErrorDto {
+    const cause = error.cause;
+    const message = error.message;
+    if (cause == undefined || typeof cause !== 'string') {
+      const cause =
+        "server error response couldn't be converted to ErrorDto, cause lost";
+      throw new ErrorDto('Error inesperado', cause);
+    }
+
+    if (message == undefined || typeof message !== 'string') {
+      const cause =
+        "server error response couldn't be converted to ErrorDto, message lost";
+      throw new ErrorDto('Error inesperado', cause);
+    }
+
+    return new ErrorDto(message, cause);
   }
 }
 

@@ -16,4 +16,8 @@ export interface IProductService {
   deleteById(productId: number): Observable<ProductResponse>;
 
   update(diff: any): Observable<ProductResponse>;
+
+  deleteImageById(id: number): Observable<number>;
+
+  uploadImage(id: number, file: File): Observable<number>;
 }

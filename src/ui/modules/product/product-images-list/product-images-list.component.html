@@ -1,7 +1,40 @@
-<div id='images-product-container'>
-  @for (url of urls; track url) {
-    <img [src]='url' height='100' width='100' />
-  } @empty {
-    <p>Sin imagenes</p>
-  }
+<div id='list-container'>
+  Imagenes:
+  <div class='add-image-container'>
+    @if (!uploadingImage) {
+      <input
+          type="file"
+          accept="image/*"
+          id="image-upload"
+          (change)="addImage($event)"
+        />
+      <label mat-fab for="image-upload" class='custom-image-upload'>
+        <div style='display: flex;'>
+          <mat-icon>add</mat-icon>
+          <div>Agregar imagen</div>
+        </div>
+      </label>
+    } @else {
+      <my-spinner />
+    }
+  </div>
+  <div id='images-product-container'>
+    @for (idImage of ids; track idImage) {
+      <div class='image-container'>
+        <div class='image-buttons'>
+          @if (deletingId == idImage) {
+            <my-spinner />
+          } @else {
+            <button mat-mini-fab (click)="deleteImageById($event, idImage)" [disabled]="deletingId">
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
+        </div>
+
+        <img [src]='generateUrl(idImage)' height='200px' width='200px' />
+      </div>
+    } @empty {
+      <p style='min-width: 200px; text-align: center;'>Sin imagenes</p>
+    }
+  </div>
 </div>

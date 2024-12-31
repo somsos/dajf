@@ -1,6 +1,22 @@
-import { Component, Inject, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { first, Observable } from 'rxjs';
+import {
+  concatMap,
+  delay,
+  filter,
+  first,
+  mergeMap,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+} from 'rxjs';
 import { ProductResponse } from '../../../../domain/product/visible/io/ProductResponse';
 import {
   ProductServiceName,
@@ -29,6 +45,10 @@ export class ProductFormUpdateComponent implements OnInit {
   public findByIdReq$?: Observable<ProductResponse>;
   public delReq$?: Observable<ProductResponse>;
   public updateReq$?: Observable<ProductResponse>;
+
+  public delImgEvent = new Subject<number | undefined>();
+  public imageDel$!: Observable<number | undefined>;
+
   public delLoading = false;
 
   private _productId = 0;

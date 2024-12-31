@@ -13,6 +13,7 @@ import { selectToken } from '../../../state/auth/auth.selectors';
 import {
   endpointProducts,
   endpointProductImage,
+  endpointUploadImage,
 } from '../../../server/IProductApi';
 import { UrlUtils } from '../../../domain/common/UrlUtils';
 import { ErrorDto, tokenDoNotExist } from '../../commons/ErrorDto';
@@ -26,6 +27,7 @@ const routesToAddToken: Endpoint[] = [
   { method: 'POST', url: endpointProducts },
   { method: 'DELETE', url: endpointProductImage },
   { method: 'PUT', url: endpointProducts + '/1' },
+  { method: 'POST', url: endpointUploadImage.replace('{$id}', '1') },
 ];
 
 export function tokenInterceptor(

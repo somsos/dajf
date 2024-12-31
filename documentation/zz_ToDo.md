@@ -40,17 +40,22 @@ X = finished
     - [X] Delete
     - [X] Update
   - [ ] Bugs
-    - [ ] Show login in progress spinner
+    - [X] Show login in progress spinner
     - [ ] General error handeling using for reactive side
     - [X] handle token expired
+    - [>] Fix the order of images (newest fist) in all products forms
+  - [ ] Documentation
+    - [ ] Explain how error are managed (http-interceptor, components-global-error-handler, state-filter-actions-by-string-match|or-dispatch-action-error)
+    - [ ] Explain how loadings are managed
 - [ ] Crud user
   - [ ] List users
   - [ ] Add user
   - [ ] Delete user
   - [ ] Update user
-- [ ] Product images
-  - [ ] Add image (main image is the last added)
-  - [ ] Remove image
+- [X] Product images
+  - [X] Add image (main image is the last added)
+  - [X] Remove image
+  - [X] Images order
 - [ ] Sells
   - [ ] ????
 
