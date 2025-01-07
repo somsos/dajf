@@ -2,6 +2,7 @@ import {
   ApplicationConfig,
   provideZoneChangeDetection,
   isDevMode,
+  ErrorHandler,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
@@ -24,6 +25,8 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 import { errorInterceptor } from './interceptors/errorInterseptor';
 import { loadingsReducer } from '../../state/loading/loading.reducer';
 import { loadingRequestInterceptor } from './interceptors/loadingRequestInterceptor';
+import { usersReducer } from '../../state/users/users.reducer';
+import { GlobalErrorHandler } from '../commons/GlobalErrorHandler';
 
 export function localStorageSyncReducer(
   reducer: ActionReducer<any>
@@ -40,6 +43,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideStore(
       {
+        users: usersReducer,
         router: routerReducer,
         auth: authReducer,
         msgs: msgReducer,
@@ -61,6 +65,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
     provideHttpClient(
       withFetch(),
       withInterceptors([

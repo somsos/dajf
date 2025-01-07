@@ -1,0 +1,47 @@
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()" class='form-container' >
+
+  <mat-form-field class="full-width">
+    <mat-label for="username">Username:</mat-label>
+    <input matInput id="name" type="text" formControlName="username" autocomplete='username' />
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label for="email">Email:</mat-label>
+    <input matInput id="email" type="email" formControlName="email" />
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label for="password">Password:</mat-label>
+    <input matInput id="password" type="password" autocomplete='new-password' formControlName="password" />
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label for="passwordRep">Repite usuario:</mat-label>
+    <input matInput id="passwordRep" type="password" autocomplete='new-password' formControlName="passwordRepeat" />
+  </mat-form-field>
+
+  <div id="list-section">
+    <div>Roles:</div>
+    <div id="roles-list-section">
+      @for (rol of roles; track rol; let i = $index) {
+        <mat-checkbox [checked]="rol.checked" (change)="update($event.checked, i)">
+          {{rol.authority}}
+        </mat-checkbox>
+      }
+    </div>
+  </div>
+
+
+
+  <div>
+    @if (actionReq$ | async) {
+      <my-spinner />
+    } @else {
+      @if (type == 'add' || type == 'update') {
+        <button mat-button (click)="userForm.reset()">Clean</button>
+        <button mat-button [disabled]="!userForm.valid">{{btnSubmitLabel}}</button>
+      }
+    }
+  </div>
+
+</form>

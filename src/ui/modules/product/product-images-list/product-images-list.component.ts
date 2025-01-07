@@ -17,7 +17,7 @@ import {
   IProductService,
 } from '../../../../domain/product/visible/IProductService';
 import { ActivatedRoute } from '@angular/router';
-import { StringUtils } from '../../../commons/StringUtils';
+import { StringUtils } from '../../../../domain/common/StringUtils';
 
 @Component({
   selector: 'product-images-list',

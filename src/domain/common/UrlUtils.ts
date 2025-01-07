@@ -25,7 +25,13 @@ export class UrlUtils {
 
     const noQueryParams = url.substring(0, queryStarter);
     const reduced = noQueryParams.replace(/\/\d+/g, '/1');
-    const resp = reduced + url.substring(queryStarter, url.length);
-    return resp;
+    const queryParamsReduced =
+      reduced + url.substring(queryStarter, url.length);
+    const urlParamsReduced = UrlUtils.remplaceUrlParam(queryParamsReduced, '1');
+    return urlParamsReduced;
+  }
+
+  static remplaceUrlParam(url: string, remplace: string) {
+    return url.replace(/\${([^}]+)}/g, remplace);
   }
 }

@@ -1,0 +1,9 @@
+<div>
+  <button mat-button (click)="goBack()">Regresar</button>
+  <h2>Agregar usuario</h2>
+  <user-form
+    type='add'
+    [actionReq$]='addingReq$'
+    (onSubmitEvent)="onSubmit($event)"
+  />
+</div>

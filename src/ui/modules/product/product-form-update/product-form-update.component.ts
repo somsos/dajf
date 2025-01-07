@@ -22,7 +22,7 @@ import {
   ProductServiceName,
   IProductService,
 } from '../../../../domain/product/visible/IProductService';
-import { DialogService } from '../../../commons/DialogService';
+import { NotificationService } from '../../../commons/NotificationService';
 import { Store } from '@ngrx/store';
 import { showSnackBack } from '../../../../state/userMessages/msgs.actions';
 import { IMessage } from '../../../../state/userMessages/dto/UserMessage';
@@ -38,7 +38,7 @@ import { ErrorDto } from '../../../commons/ErrorDto';
 })
 export class ProductFormUpdateComponent implements OnInit {
   private _activatedRoute = inject(ActivatedRoute);
-  private _dialogService = inject(DialogService);
+  private _dialogService = inject(NotificationService);
   private _store = inject(Store<any>);
   private _router = inject(Router);
 

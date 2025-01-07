@@ -1,4 +1,4 @@
-import { ErrorDto } from './ErrorDto';
+import { ErrorDto } from '../../ui/commons/ErrorDto';
 
 export class StringUtils {
   private getLastNumberFromString(url: string): number {
@@ -19,5 +19,17 @@ export class StringUtils {
     }
     const number = parseInt(toConvert);
     return number;
+  }
+
+  public static trimAndCheckIsNotEmpty(str?: String): boolean {
+    if (!str) {
+      return false;
+    }
+
+    str = str.trim();
+    if (str == '') {
+      return false;
+    }
+    return true;
   }
 }

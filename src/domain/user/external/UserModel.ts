@@ -1,12 +1,46 @@
+import { AppEntity } from '../../common/dto/IEntity';
+import { StringUtils } from '../../common/StringUtils';
 import { IRole } from './IRole';
 
-export class UserModel {
+export class UserModel extends AppEntity {
   constructor(
-    public id: number,
+    idArg: number,
     public username: string,
-    public roles: IRole[],
+    public email: string,
+    public roles: IRole[] = [],
     public password: string | undefined
-  ) {}
+  ) {
+    super(idArg, new Date());
+  }
+
+  static prepareAndValidateToAdd(check: UserModel): boolean {
+    if (StringUtils.trimAndCheckIsNotEmpty(check.username) == false) {
+      return false;
+    }
+
+    if (StringUtils.trimAndCheckIsNotEmpty(check.email) == false) {
+      return false;
+    }
+
+    if (StringUtils.trimAndCheckIsNotEmpty(check.password) == false) {
+      return false;
+    }
+
+    return true;
+  }
+
+  static clone(source: UserModel): UserModel {
+    const cloned: UserModel = {
+      username: source.username,
+      id: source.id,
+      email: source.email,
+      roles: source.roles,
+      password: source.password,
+      createAt: new Date(),
+    };
+    console.log('cloned', cloned);
+    return cloned;
+  }
 
   static isAdmin(roles?: IRole[]): boolean {
     if (!roles || roles.length <= 0) {

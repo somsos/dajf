@@ -44,18 +44,23 @@ X = finished
     - [ ] General error handeling using for reactive side
     - [X] handle token expired
     - [>] Fix the order of images (newest fist) in all products forms
-  - [ ] Documentation
-    - [ ] Explain how error are managed (http-interceptor, components-global-error-handler, state-filter-actions-by-string-match|or-dispatch-action-error)
-    - [ ] Explain how loadings are managed
+  - [X] Product images
+    - [X] Add image (main image is the last added)
+    - [X] Remove image
+    - [X] Images order
+- [X] Documentation
+  - [X] Explain how error are managed (http-interceptor, components-global-error-handler, state-filter-actions-by-string-match|or-dispatch-action-error)
+  - [X] Explain how loadings are managed
 - [ ] Crud user
-  - [ ] List users
-  - [ ] Add user
+  - [>] List users
+    - [X] Showing loading users
+    - [X] Show table
+    - [ ] Refactor loadings state (idReq(string|number), loading(boolean), failure(error), success(result))
+    - [X] Pagination controls
+    - [ ] Connect with backend
+  - [>] Add user
   - [ ] Delete user
   - [ ] Update user
-- [X] Product images
-  - [X] Add image (main image is the last added)
-  - [X] Remove image
-  - [X] Images order
 - [ ] Sells
   - [ ] ????
 

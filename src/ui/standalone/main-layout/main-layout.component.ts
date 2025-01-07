@@ -8,9 +8,8 @@ import { Store } from '@ngrx/store';
 import { UserModel } from '../../../domain/user/external/UserModel';
 import { selectLogged } from '../../../state/auth/auth.selectors';
 import { clearAuthUser } from '../../../state/auth/auth.actions';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { selectSnackBar } from '../../../state/userMessages/msgs.selectors';
-import { DialogService } from '../../commons/DialogService';
+import { NotificationService } from '../../commons/NotificationService';
 
 @Component({
   selector: 'main-layout-root',
@@ -22,13 +21,13 @@ import { DialogService } from '../../commons/DialogService';
     MatButtonModule,
     RouterModule,
   ],
-  providers: [DialogService],
+  providers: [NotificationService],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
 })
 export class MainLayoutComponent implements OnInit {
   auth$: Observable<UserModel | undefined>;
-  private _snackBar = inject(MatSnackBar);
+  private readonly _notificationSrv = inject(NotificationService);
 
   isAdmin = UserModel.isAdmin;
   isStocker = UserModel.isStocker;
@@ -51,7 +50,7 @@ export class MainLayoutComponent implements OnInit {
       .select(selectSnackBar)
       .pipe(filter((m) => m != null))
       .subscribe((m) => {
-        this._snackBar.open(m.message, m.actionLabel, { duration: 3000 });
+        this._notificationSrv.showSnackBar(m.message, m.actionLabel);
       });
   }
 }

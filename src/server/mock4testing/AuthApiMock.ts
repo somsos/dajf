@@ -22,8 +22,10 @@ export class AuthApiMock implements IAuthApi {
       const user: UserModel = {
         id: 1,
         username: 'mario1',
+        email: 'mario1@email.com',
         roles: [role],
         password: undefined,
+        createAt: new Date(),
       };
       userAuth = new LoginResponse(token, user);
     }
@@ -34,8 +36,10 @@ export class AuthApiMock implements IAuthApi {
       const user: UserModel = {
         id: 2,
         username: 'mario2',
+        email: 'mario2@email.com',
         roles: [role],
         password: undefined,
+        createAt: new Date(),
       };
       userAuth = new LoginResponse(token, user);
     }
@@ -46,8 +50,10 @@ export class AuthApiMock implements IAuthApi {
       const user: UserModel = {
         id: 3,
         username: 'mario3',
+        email: 'mario2@email.com',
         roles: [role],
         password: undefined,
+        createAt: new Date(),
       };
       userAuth = new LoginResponse(token, user);
     }
