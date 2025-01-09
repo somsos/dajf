@@ -27,6 +27,7 @@ import { loadingsReducer } from '../../state/loading/loading.reducer';
 import { loadingRequestInterceptor } from './interceptors/loadingRequestInterceptor';
 import { usersReducer } from '../../state/users/users.reducer';
 import { GlobalErrorHandler } from '../commons/GlobalErrorHandler';
+import { requestReducer } from '../../state/requests/request.conf.exports';
 
 export function localStorageSyncReducer(
   reducer: ActionReducer<any>
@@ -48,6 +49,7 @@ export const appConfig: ApplicationConfig = {
         auth: authReducer,
         msgs: msgReducer,
         loadings: loadingsReducer,
+        requests: requestReducer,
       },
       {
         metaReducers: metaReducers,

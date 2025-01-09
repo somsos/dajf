@@ -1,6 +1,7 @@
 import { UserModel } from '../../domain/user/external/UserModel';
 import { createReducer, on } from '@ngrx/store';
 import { UserActions } from './users.actions';
+import { mutableOn } from 'ngrx-etc';
 
 export interface UsersState {
   pageNumber: number;
@@ -22,5 +23,9 @@ export const usersReducer = createReducer(
   on(UserActions.setUsers, (state, { page }) => {
     const newState = { ...state, ...page };
     return newState;
+  }),
+  mutableOn(UserActions.update, (state, { data }) => {
+    const iToUpdate = state.content.findIndex((u) => u.id == data.id);
+    state.content[iToUpdate] = data;
   })
 );

@@ -15,7 +15,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     }
 
     this._notiSrv.showSnackBar('Error inesperado', 'Ok');
-    console.warn('error unhandled:', error);
+    console.trace('error unhandled:', error);
   }
 
   handleErrorDto(error: any): boolean {

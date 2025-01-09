@@ -6,6 +6,8 @@
   - [Use of  Utility Types](#use-of--utility-types)
   - [Use of ngrx-etc](#use-of-ngrx-etc)
   - [Use a service to wrap the ngrx/store state](#use-a-service-to-wrap-the-ngrxstore-state)
+  - [How to create modules that doen't interdepend beewten them](#how-to-create-modules-that-doent-interdepend-beewten-them)
+  - [Pitfalls](#pitfalls)
 
 ## http request global error handling
 
@@ -99,8 +101,8 @@ and keep using the help of the compiler.
 
 ## Use of ngrx-etc
 
-- source1: https://www.npmjs.com/package/ngrx-etc
-- source2: https://github.com/timdeschryver/ngrx-etc
+- [source1](https://www.npmjs.com/package/ngrx-etc)
+- [source2](https://github.com/timdeschryver/ngrx-etc)
 
 Guardar objetos complejos no funciona, en mi caso queria guardar un objeto
 que extendia de Error para tener el stacj disponible, pero no lo guarda.
@@ -110,3 +112,106 @@ que extendia de Error para tener el stacj disponible, pero no lo guarda.
 Manage the store can be complex because is loosely coupled and flexible, so
 to keep a record of what the UI requiere from the state, I create a Service that
 that represent the connection between the UI and the state.
+
+## How to create modules that doen't interdepend beewten them
+
+We can have an isolated module, follgin the internal and extennal folders, and
+the external folder just expose dtos that are contained in the common folder,
+for example:
+
+**Note: The tricky part** is that we need to pass/copy/move from the public part of
+our module, to the common modules, each module sums files to common, this because
+the other modules can communicate with the module we just add, and the time we
+move our module to other project (that will require we take the common module
+as well), our module is still working, and for much there will be an error, of
+implementation not found, but with the interface we easily can implement a new
+one or discover what other module should we implement or bring of our old project.
+
+```r
+app/
+  common/
+    dtos/
+      UserDto.ts
+      ProductDto.ts
+      ErrorDto.ts
+    helpers/
+      ApiHelper.ts
+      StateHelper.ts
+    types/
+      AppEntity.ts
+      AppPAge<E extends AppEntity>.ts
+    utils
+      StringUtils.ts
+  
+  auth/
+    internal/
+      api/
+        reqAndResp/
+          LoginRequest.ts
+          LoginResponse.ts
+        AuthApi.ts
+    AuthUIComponnets.index.ts <- to wrapper pages, Componets, routes, etc. to use in the adapter
+    AuthHttpInterceptors.ts
+    IAuthHelper.ts <- to use in other modules
+    ---
+      // this file we move it to commons, so we can use it in any other module.
+      interface IAuthHelper {
+        getAuthUser(): ProductDto;
+        authUserCanAccessTo(path: string): boolean;
+      }
+    ---
+    index.adapter.ts <- elements to export to the adapter
+    index.commons.ts <- element to export to commons
+    README.md <- explain how to use the module, in commons (import and export) and modules (how to use) and in adapter (hot to deliver to the user).
+  products/
+    internals/
+    ProductUIComponnets.index.ts <- to wrapper of clases to use in the adapter
+    ProductHelper.ts <- to use in other modules
+  auth/
+    ...
+
+```
+
+the thruth is that it doen't worth it to have separated the code of the
+different layers for example, domain~logic, server~dao, ui~view, because, it's
+rarely probable we use them individualy and more probable to losse the inter
+module dependency graph, because we have our domain divided in 3 folders
+(data, logic, view), and if we do not make this divition eatch domain is
+closed in it's own folder, and in the same name folders and files, we can express
+what can be called from others modules, or the adapter~orchestator.
+Maybe the backtrack is that the module commons, is more coupled to all the modules,
+but in the seldom case, we can export out module, we make wit all the common
+module, and even in each module put a readme to define how to use the module
+in other modules, and how to include it in the adapter~orchestator.
+
+<!--
+================================================================================
+================================================================================
+================================================================================
+================================================================================
+-->
+
+## Pitfalls
+
+be careful, is better to build the reactive form using formBuilder, because I
+couldn't delete a control using the name of the field passed as string.
+
+```ts
+class Component {
+  private readonly _formBuilder = inject(FormBuilder);
+  readonly userForm: FormGroup = this._formBuilder.group({
+    username: ['', Validators.required, Validators.min(3), Validators.max(16)],
+    ...
+  })
+  ...
+  this.userForm.removeControl('password'); // <-- //Ok
+}
+
+//----------------
+class Component {
+  userFormXX = new FormGroup({ username: new FormControl('', ) ... });
+  ...
+  this.userForm.removeControl('password'); // <--- Error
+}
+
+```

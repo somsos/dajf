@@ -12,5 +12,7 @@ export const EPUsersPage =
 export interface IUsersApi {
   findByPage(req: IPageDto<UserModel>): Observable<UsersState>;
 
-  addUser(toAdd: UserModel): Observable<UserModel>;
+  add(toAdd: UserModel): Observable<UserModel>;
+
+  update(toAdd: UserModel): Observable<UserModel>;
 }

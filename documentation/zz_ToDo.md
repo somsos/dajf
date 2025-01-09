@@ -57,10 +57,14 @@ X = finished
     - [X] Show table
     - [ ] Refactor loadings state (idReq(string|number), loading(boolean), failure(error), success(result))
     - [X] Pagination controls
-    - [ ] Connect with backend
-  - [>] Add user
-  - [ ] Delete user
-  - [ ] Update user
+  - [X] Add user
+  - [>] Delete user
+  - [X] Update user
+- [ ] Connect crud user with backend
+  - [ ] List
+  - [ ] Add
+  - [ ] Delete
+  - [ ] Update
 - [ ] Sells
   - [ ] ????
 

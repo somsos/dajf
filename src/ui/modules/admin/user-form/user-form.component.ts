@@ -1,10 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { UserModel } from '../../../../domain/user/external/UserModel';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { MatSelectChange } from '@angular/material/select';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 import { IRole } from '../../../../domain/user/external/IRole';
 import { ErrorDto } from '../../../commons/ErrorDto';
+import { IRequestDto } from '../../../../state/requests/IRequestDto';
 
 @Component({
   selector: 'user-form',
@@ -12,27 +19,22 @@ import { ErrorDto } from '../../../commons/ErrorDto';
   styleUrl: './user-form.component.scss',
 })
 export class UserFormComponent implements OnInit {
-  userForm = new FormGroup({
-    username: new FormControl('', [
-      Validators.required,
-      Validators.min(3),
-      Validators.max(16),
-    ]),
-    email: new FormControl('', [
-      Validators.required,
-      Validators.email,
-      Validators.max(26),
-    ]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.min(3),
-      Validators.max(16),
-    ]),
-    passwordRepeat: new FormControl('', [
-      Validators.required,
-      Validators.min(3),
-      Validators.max(16),
-    ]),
+  private readonly _formBuilder = inject(FormBuilder);
+
+  readonly userForm: FormGroup = this._formBuilder.group({
+    username: [
+      null,
+      [Validators.required, Validators.min(3), Validators.max(16)],
+    ],
+    email: [null, [Validators.required, Validators.min(3), Validators.max(16)]],
+    password: [
+      null,
+      [Validators.required, Validators.min(3), Validators.max(16)],
+    ],
+    passwordRepeat: [
+      null,
+      [Validators.required, Validators.min(3), Validators.max(16)],
+    ],
   });
 
   roles = [
@@ -45,7 +47,7 @@ export class UserFormComponent implements OnInit {
   type!: string;
 
   @Input()
-  actionReq$!: Observable<boolean>;
+  actionReq$!: Observable<IRequestDto<unknown>>;
 
   @Input()
   readReq$: Observable<UserModel> | undefined;
@@ -53,21 +55,13 @@ export class UserFormComponent implements OnInit {
   @Output()
   readonly onSubmitEvent = new EventEmitter<UserModel>();
 
+  @Input()
   userOnForm?: UserModel;
 
   btnSubmitLabel = 'Agregar';
 
   ngOnInit(): void {
     this._setupForm();
-    /*
-    this.rolesToShow.forEach((r) => {
-      this.userForm.controls.roles.push(new FormControl(''));
-    });
-    console.log(
-      'this.userForm.controls.roles',
-      this.userForm.controls.roles.controls
-    );
-    */
   }
 
   private _setupForm() {
@@ -82,12 +76,30 @@ export class UserFormComponent implements OnInit {
         break;
 
       case 'update':
-        //this._setUpdateForm();
+        this._setUpdateForm();
         break;
 
       default:
         break;
     }
+  }
+
+  private _setUpdateForm(): void {
+    this.btnSubmitLabel = 'Actualizar';
+
+    if (!this.userOnForm) {
+      throw new ErrorDto(
+        'Error inesperado',
+        'this.userOnForm required for update form'
+      );
+    }
+    this._fillForm();
+    this._removeUpdateNotRequiredFields();
+  }
+
+  private _removeUpdateNotRequiredFields() {
+    this.userForm.removeControl('password');
+    this.userForm.removeControl('passwordRepeat');
   }
 
   private _setAddForm(): void {
@@ -115,12 +127,20 @@ export class UserFormComponent implements OnInit {
       password: this.userOnForm.password ?? null,
       passwordRepeat: '',
     });
+
+    this.userOnForm.roles.forEach((fromUser) => {
+      this.roles.forEach((fromAll) => {
+        if (fromUser.authority === fromAll.authority) {
+          fromAll.checked = true;
+        }
+      });
+    });
   }
 
   private _extractUserOnForm(): void {
-    const username = this.userForm.controls.username.value ?? '';
-    const email = this.userForm.controls.email.value ?? '';
-    const password = this.userForm.controls.password.value ?? '';
+    const username = this.userForm.controls['username'].value ?? '';
+    const email = this.userForm.controls['email'].value ?? '';
+    const password = this.userForm.controls['password']?.value ?? '';
     const roles = this.roles
       .filter((r) => r.checked)
       .map((rForm) => ({ id: rForm.id, authority: rForm.authority } as IRole));
@@ -143,18 +163,21 @@ export class UserFormComponent implements OnInit {
     }
 
     this._extractUserOnForm();
-    const passRepeated = this.userForm.controls.passwordRepeat.value ?? '';
+    this._comparePasswords();
+    this.onSubmitEvent.emit(this.userOnForm);
+  }
+
+  private _comparePasswords(): void {
+    if (this.type == 'update') {
+      return;
+    }
+    const passRepeated = this.userForm.controls['passwordRepeat'].value ?? '';
     if (passRepeated != this.userOnForm?.password) {
       throw new ErrorDto(
         'Contraseñas no coinciden',
         'matching passwords required to continue'
       );
     }
-    this.onSubmitEvent.emit(this.userOnForm);
-  }
-
-  onSelectRole($event: MatSelectChange) {
-    console.log('onSelectRole, $event', $event);
   }
 
   update(completed: boolean, index: number) {

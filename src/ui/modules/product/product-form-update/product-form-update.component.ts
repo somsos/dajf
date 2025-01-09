@@ -1,22 +1,6 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { Component, Inject, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  concatMap,
-  delay,
-  filter,
-  first,
-  mergeMap,
-  Observable,
-  of,
-  Subject,
-  switchMap,
-} from 'rxjs';
+import { first, Observable, Subject } from 'rxjs';
 import { ProductResponse } from '../../../../domain/product/visible/io/ProductResponse';
 import {
   ProductServiceName,

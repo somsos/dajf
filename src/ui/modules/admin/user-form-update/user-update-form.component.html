@@ -1,0 +1,15 @@
+<div>
+  <button mat-button (click)="goBack()">Regresar</button>
+  <h2>Actualisar usuario</h2>
+  @if(userFound) {
+    <user-form
+      type='update'
+      [actionReq$]='actionStatus$'
+      [userOnForm]='userFound'
+      (onSubmitEvent)="onSubmit($event)"
+    />
+  } @else {
+    <p>Loading...</p>
+  }
+
+</div>

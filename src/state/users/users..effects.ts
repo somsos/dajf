@@ -1,22 +1,9 @@
 import { Inject, Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
-import {
-  map,
-  exhaustMap,
-  catchError,
-  filter,
-  tap,
-  first,
-  take,
-  delay,
-  takeUntil,
-  takeWhile,
-} from 'rxjs/operators';
+import { map, exhaustMap, catchError, tap } from 'rxjs/operators';
 import { IUsersApi, usersApiName } from '../../server/IUserApi';
 import { UserActions, UserNames } from './users.actions';
-import { IPageDto } from '../../domain/common/dto/IPageDto';
-import { UserModel } from '../../domain/user/external/UserModel';
 
 @Injectable()
 export class UsersEffects {
@@ -42,13 +29,30 @@ export class UsersEffects {
     return this.actions$.pipe(
       ofType(UserActions.addUser),
       exhaustMap((action) =>
-        this._api.addUser(action.data).pipe(
+        this._api.add(action.data).pipe(
           map((added) => ({
             type: UserNames.setUser,
             data: added,
           })),
           catchError((err) => {
             console.warn('error on effect', err);
+            return EMPTY;
+          })
+        )
+      )
+    );
+  });
+
+  update$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(UserNames.apiUpdate),
+      exhaustMap((action) =>
+        this._api.update(action.data).pipe(
+          map((newInfo) => ({
+            type: UserNames.storeUpdate,
+            data: newInfo,
+          })),
+          catchError((err) => {
             return EMPTY;
           })
         )

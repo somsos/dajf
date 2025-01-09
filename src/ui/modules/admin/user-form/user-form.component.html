@@ -10,15 +10,17 @@
     <input matInput id="email" type="email" formControlName="email" />
   </mat-form-field>
 
-  <mat-form-field class="full-width">
-    <mat-label for="password">Password:</mat-label>
-    <input matInput id="password" type="password" autocomplete='new-password' formControlName="password" />
-  </mat-form-field>
+  @if(type == 'add') {
+    <mat-form-field class="full-width">
+      <mat-label for="password">Contraseña:</mat-label>
+      <input matInput id="password" type="password" autocomplete='new-password' formControlName="password" />
+    </mat-form-field>
 
-  <mat-form-field class="full-width">
-    <mat-label for="passwordRep">Repite usuario:</mat-label>
-    <input matInput id="passwordRep" type="password" autocomplete='new-password' formControlName="passwordRepeat" />
-  </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label for="passwordRep">Repite contraseña:</mat-label>
+      <input matInput id="passwordRep" type="password" autocomplete='new-password' formControlName="passwordRepeat" />
+    </mat-form-field>
+  }
 
   <div id="list-section">
     <div>Roles:</div>
@@ -34,12 +36,19 @@
 
 
   <div>
-    @if (actionReq$ | async) {
-      <my-spinner />
-    } @else {
-      @if (type == 'add' || type == 'update') {
-        <button mat-button (click)="userForm.reset()">Clean</button>
-        <button mat-button [disabled]="!userForm.valid">{{btnSubmitLabel}}</button>
+    @if (actionReq$ | async; as reqStatus) {
+      @switch (reqStatus.status) {
+        @case ('unstarted') {
+          @if (type != 'details') {
+            <button mat-button [disabled]="!userForm.valid">{{btnSubmitLabel}}</button>
+          }
+        }
+        @case ('loading') {
+          <my-spinner />
+        }
+        @case ('failed') {
+          <p>Error: {{reqStatus.error?.message ?? 'Error inesperado'}}</p>
+        }
       }
     }
   </div>

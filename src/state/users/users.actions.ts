@@ -8,7 +8,14 @@ export const UserNames = {
   setUsers: '[User/Store] Set Users',
   saveUser: '[User/API] save user',
   setUser: '[User/Store] set user',
+  apiUpdate: '[User/API] update user',
+  storeUpdate: '[User/Store] update user',
 };
+
+const updateUser = createAction(
+  UserNames.apiUpdate,
+  props<{ data: UserModel }>()
+);
 
 const loadUsers = createAction(
   UserNames.loadUsers,
@@ -30,9 +37,15 @@ export const setUser = createAction(
   props<{ data: UserModel }>()
 );
 
+export const update = createAction(
+  UserNames.storeUpdate,
+  props<{ data: UserModel }>()
+);
+
 export const UserActions = {
   loadUsers,
   setUsers,
   addUser,
   setUser,
+  update,
 };

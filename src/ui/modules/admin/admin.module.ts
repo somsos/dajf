@@ -22,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserFormComponent } from './user-form/user-form.component';
 import { UserAddFormComponent } from './user-form-add/user-add-form.component';
 import { UserStateService } from '../../../state/users/UsersStateService';
+import { UserUpdateFormComponent } from './user-form-update/user-update-form.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { UserStateService } from '../../../state/users/UsersStateService';
     AdminDashboardComponent,
     UsersTableComponent,
     UserFormComponent,
+    UserUpdateFormComponent,
     UserAddFormComponent,
   ],
   imports: [
