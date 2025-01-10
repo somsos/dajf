@@ -15,4 +15,6 @@ export interface IUsersApi {
   add(toAdd: UserModel): Observable<UserModel>;
 
   update(toAdd: UserModel): Observable<UserModel>;
+
+  deleteById(idUser: number): Observable<UserModel>;
 }

@@ -57,4 +57,10 @@ export class UserStateService {
     );
     return reqStatus;
   }
+
+  dispatchRequestActionDeleteById(
+    idUser: number
+  ): Observable<IRequestDto<unknown>> {
+    return this._requestState.dispatchRequest(UserNames.apiDeleteById, idUser);
+  }
 }

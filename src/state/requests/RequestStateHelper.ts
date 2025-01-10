@@ -45,7 +45,6 @@ export class RequestStateHelper {
   }
 
   _getLastRequestOfType(type: string): Observable<IRequestDto<unknown>> {
-    console.log('_getLastRequestOfType', this._requests);
     const found = this._requests.find((r) => r.type == type);
     if (!found) {
       throw 'there is no request';

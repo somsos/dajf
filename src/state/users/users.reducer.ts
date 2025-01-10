@@ -27,5 +27,12 @@ export const usersReducer = createReducer(
   mutableOn(UserActions.update, (state, { data }) => {
     const iToUpdate = state.content.findIndex((u) => u.id == data.id);
     state.content[iToUpdate] = data;
+  }),
+  mutableOn(UserActions.storeDeleteById, (state, { data }) => {
+    const indexToDelete = state.content.findIndex((u) => u.id == data);
+    state.content = [
+      ...state.content.slice(0, indexToDelete),
+      ...state.content.slice(indexToDelete + 1),
+    ];
   })
 );

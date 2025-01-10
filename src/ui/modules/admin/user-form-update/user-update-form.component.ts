@@ -1,13 +1,6 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import { UserModel } from '../../../../domain/user/external/UserModel';
 import { filter, first, Observable, of, tap } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { StoreActions } from '../../../commons/StoreActions';
-import { UserNames } from '../../../../state/users/users.actions';
-import { existLoading } from '../../../../state/loading/loading.selectors';
-import { EPUsers } from '../../../../server/IUserApi';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserStateService } from '../../../../state/users/UsersStateService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StringUtils } from '../../../../domain/common/StringUtils';
@@ -27,9 +20,15 @@ export class UserUpdateFormComponent implements OnInit {
   private readonly _router = inject(Router);
   private readonly _userState = inject(UserStateService);
   private readonly _activatedRoute = inject(ActivatedRoute);
+  private idUser = -1;
 
   actionStatus$: Observable<IRequestDto<unknown>> = of({
     id: 'EcJAxKoSk',
+    status: 'unstarted',
+  });
+
+  deleteReq$: Observable<IRequestDto<unknown>> = of({
+    id: 'jHr3nhSohQz',
     status: 'unstarted',
   });
 
@@ -39,8 +38,8 @@ export class UserUpdateFormComponent implements OnInit {
 
   private _findUserByPathId() {
     this._activatedRoute.paramMap.subscribe((params) => {
-      const id = StringUtils.stringToNumberOtThrow(params.get('id'));
-      this._userState.selectUserById(id).subscribe((found) => {
+      this.idUser = StringUtils.stringToNumberOtThrow(params.get('id'));
+      this._userState.selectUserById(this.idUser).subscribe((found) => {
         if (!found) {
           throw new ErrorDto(
             'Usuario no encontrado',
@@ -68,7 +67,20 @@ export class UserUpdateFormComponent implements OnInit {
       });
   }
 
-  goBack() {
+  goBack(): void {
     this._router.navigateByUrl('/admin/users');
+  }
+
+  onDelete(e: Event) {
+    e.preventDefault();
+    this.deleteReq$ = this._userState.dispatchRequestActionDeleteById(
+      this.idUser
+    );
+    this.deleteReq$
+      .pipe(
+        filter((s) => s.status == 'success'),
+        first()
+      )
+      .subscribe({ complete: () => this.goBack() });
   }
 }

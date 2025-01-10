@@ -8,8 +8,26 @@
       [userOnForm]='userFound'
       (onSubmitEvent)="onSubmit($event)"
     />
+    <div class='cuation-btn'>
+      @if (deleteReq$ | async; as delReq) {
+        @switch (delReq.status) {
+          @case ('unstarted') {
+            <button mat-button (click)="onDelete($event)">Eliminar</button>
+          }
+          @case ('loading') {
+            <my-spinner />
+          }
+          @case ('failed') {
+            <button mat-button (click)="onDelete($event)">Eliminar</button>
+            <p>Error: {{delReq.error}}</p>
+          }
+        }
+      }
+
+    </div>
+
   } @else {
-    <p>Loading...</p>
+    <my-spinner />
   }
 
 </div>

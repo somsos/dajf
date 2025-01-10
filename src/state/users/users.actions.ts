@@ -10,6 +10,8 @@ export const UserNames = {
   setUser: '[User/Store] set user',
   apiUpdate: '[User/API] update user',
   storeUpdate: '[User/Store] update user',
+  apiDeleteById: '[User/API] delete by id',
+  storeDeleteById: '[User/Store] delete by id',
 };
 
 const updateUser = createAction(
@@ -42,10 +44,16 @@ export const update = createAction(
   props<{ data: UserModel }>()
 );
 
+export const storeDeleteById = createAction(
+  UserNames.storeDeleteById,
+  props<{ data: number }>()
+);
+
 export const UserActions = {
   loadUsers,
   setUsers,
   addUser,
   setUser,
   update,
+  storeDeleteById,
 };

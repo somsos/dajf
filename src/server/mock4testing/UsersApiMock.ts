@@ -97,6 +97,35 @@ export class UsersApiMock implements IUsersApi {
       })
     );
   }
+
+  deleteById(idToDel: number): Observable<UserModel> {
+    const indexToDelete = allUsers.findIndex((u) => u.id == idToDel);
+    if (indexToDelete == -1) {
+      const msg = 'Usuario a modificar no encontrado';
+      return throwError(() => new ErrorDto(msg, ''));
+    }
+    const resp = allUsers[indexToDelete];
+
+    allUsers = [
+      ...allUsers.slice(0, indexToDelete),
+      ...allUsers.slice(indexToDelete + 1),
+    ];
+
+    const idReq = this._requestState.getLastAndMarkItAsCaught();
+
+    return of(resp).pipe(
+      delay(2000),
+      first(),
+      tap({
+        complete: () => {
+          this._requestState.setSuccess(idReq);
+        },
+        error: (error) => {
+          this._requestState.setFailed(idReq, error);
+        },
+      })
+    );
+  }
 }
 
 interface Rol {

@@ -51,20 +51,20 @@ X = finished
 - [X] Documentation
   - [X] Explain how error are managed (http-interceptor, components-global-error-handler, state-filter-actions-by-string-match|or-dispatch-action-error)
   - [X] Explain how loadings are managed
-- [ ] Crud user
+- [X] Crud user
   - [>] List users
     - [X] Showing loading users
     - [X] Show table
-    - [ ] Refactor loadings state (idReq(string|number), loading(boolean), failure(error), success(result))
     - [X] Pagination controls
   - [X] Add user
-  - [>] Delete user
+  - [X] Delete user
   - [X] Update user
-- [ ] Connect crud user with backend
+- [>] Connect crud user with backend
   - [ ] List
   - [ ] Add
   - [ ] Delete
   - [ ] Update
+  - [ ] Refactor loadings state (idReq(string|number), loading(boolean), failure(error), success(result))
 - [ ] Sells
   - [ ] ????
 

@@ -59,4 +59,21 @@ export class UsersEffects {
       )
     );
   });
+
+  deleteById$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(UserNames.apiDeleteById),
+      exhaustMap((action) =>
+        this._api.deleteById(action.data).pipe(
+          map((newInfo) => ({
+            type: UserNames.storeDeleteById,
+            data: newInfo,
+          })),
+          catchError((err) => {
+            return EMPTY;
+          })
+        )
+      )
+    );
+  });
 }
